@@ -3,16 +3,16 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
+title: 没有什么能够阻挡
 subtitle:
-description:
-author: John Doe
-email:
-language:
+description: tech
+author: Vin Zhou
+email:  
+language: zh-CN
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yoursite.com
+url: http://vin-zhou.github.com
 root: /
 permalink: :year/:month/:day/:title/
 tag_dir: tags
@@ -48,9 +48,9 @@ tag_map:
 ## 2: Enable pagination
 ## 1: Disable pagination
 ## 0: Fully Disable
-archive: 2
-category: 2
-tag: 2
+archive: 1
+category: 1
+tag: 1
 
 # Server
 ## Hexo uses Connect as a server
@@ -79,12 +79,31 @@ disqus_shortname:
 # Extensions
 ## Plugins: https://github.com/hexojs/hexo/wiki/Plugins
 ## Themes: https://github.com/hexojs/hexo/wiki/Themes
-theme: landscape
+theme: jacman
 exclude_generator:
+Plugins:
+- hexo-generator-feed
+- hexo-generator-sitemap
+
+# Markdown
+## https://github.com/chjj/marked
+markdown:
+gfm: true
+pedantic : false
+sanitize: false
+tables: true
+breaks: true
+smartLists: true
+smartpants: true
+
+# Stylus
+stylus:
+compress: true
+
 
 # Deployment
 ## Docs: http://hexo.io/docs/deployment.html
 deploy:
   type: github
-  repository: git@github.com:vin-zhou/vin-zhou.github.com.github
+  repository: git@github.com:vin-zhou/vin-zhou.github.com.git
   branch: master
