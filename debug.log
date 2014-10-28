@@ -1,0 +1,22 @@
+date: "2014-10-28 09:55:14.955"
+argv: node /usr/local/bin/hexo --debug
+os: Darwin 14.0.0 darwin x64
+versions:
+  http_parser: "1.0"
+  node: 0.10.32
+  v8: 3.14.5.9
+  ares: 1.9.0-DEV
+  uv: 0.10.28
+  zlib: 1.2.3
+  modules: "11"
+  openssl: 1.0.1i
+  hexo: 2.8.3
+---
+[debug] 09:55:15.197 Config file loaded from /Users/zhouwenshan/Developer/git_blog/_config.yml
+[debug] 09:55:15.201 Version info checked successfully
+[debug] 09:55:15.218 Loading database.
+[debug] 09:55:15.257 Processed: draft.md (1ms)
+[debug] 09:55:15.259 Processed: page.md (3ms)
+[debug] 09:55:15.259 Processed: photo.md (3ms)
+[debug] 09:55:15.259 Processed: post.md (2ms)
+[debug] 09:55:15.262 Script load successfully: fancybox.js
