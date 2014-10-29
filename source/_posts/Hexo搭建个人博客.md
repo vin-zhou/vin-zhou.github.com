@@ -181,7 +181,23 @@ $ hexo g   // 生成本地网页
 *  ```c
 $ hexo d   // 部署到github上
    ```
-###5> 其他说明
+###5> 关联Github
+可以根据附录的参考文章链接，生成SSH密钥，这里补充一点，最后一步测试  
+
+```c
+$ ssh -T git@github.com
+```
+若出现   
+   ssh: connect to host github.com port 22: Connection 
+
+则可以在 ./.ssh/config文件中（没有，则新建）
+
+    host github.com
+        hostname ssh.github.com
+        port 443
+更改使用新的443访问端口。
+
+###6> 其他说明
 
 * 在搭建时，出现过需用localhost:4000/public访问资源的问题、以及生成页面空白、css访问不到等问题，出现问题一般尝试用 hexo clean ； hexo g; hexo s;重新生成。如问题仍不能解决，最终采用的是卸载hexo，重新安装配置一次。
   注意要先把_config.xml、source、theme等文件备份。
