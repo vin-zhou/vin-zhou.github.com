@@ -1,6 +1,6 @@
 title: Hexo搭建个人博客
 date: 2014-10-23 15:24:49
-tags: Hexo
+tags: [Hexo, iOS]
 ---
 Hexo折腾了好久，总结了一点安装心得。步骤记录如下：
 
