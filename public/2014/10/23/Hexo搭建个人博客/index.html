@@ -98,7 +98,7 @@ terminal至/usr/">
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1>_安装Hexo"><span class="toc-number">1.</span> <span class="toc-text">1> 安装Hexo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2>_启用Hexo"><span class="toc-number">2.</span> <span class="toc-text">2> 启用Hexo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3>_设置Hexo"><span class="toc-number">3.</span> <span class="toc-text">3> 设置Hexo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4>_Hexo常用命令"><span class="toc-number">4.</span> <span class="toc-text">4> Hexo常用命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5>_其他说明"><span class="toc-number">5.</span> <span class="toc-text">5> 其他说明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number"></span> <span class="toc-text">参考</span></a>
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1>_安装Hexo"><span class="toc-number">1.</span> <span class="toc-text">1> 安装Hexo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2>_启用Hexo"><span class="toc-number">2.</span> <span class="toc-text">2> 启用Hexo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3>_设置Hexo"><span class="toc-number">3.</span> <span class="toc-text">3> 设置Hexo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4>_Hexo常用命令"><span class="toc-number">4.</span> <span class="toc-text">4> Hexo常用命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5>_关联Github"><span class="toc-number">5.</span> <span class="toc-text">5> 关联Github</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6>_其他说明"><span class="toc-number">6.</span> <span class="toc-text">6> 其他说明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number"></span> <span class="toc-text">参考</span></a>
 		
 		</div>
 		
@@ -283,7 +283,17 @@ pedantic : false
 </ul>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo d   <span class="comment">// 部署到github上</span></div></pre></td></tr></table></figure>
 
-<h3 id="5&gt;_其他说明">5&gt; 其他说明</h3>
+<h3 id="5&gt;_关联Github">5&gt; 关联Github</h3>
+<p>可以根据附录的参考文章链接，生成SSH密钥，这里补充一点，最后一步测试  </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ssh -T git@github.com</div></pre></td></tr></table></figure>
+
+<p>若出现<br>   ssh: connect to host github.com port 22: Connection </p>
+<p>则可以在 ./.ssh/config文件中（没有，则新建）</p>
+<pre><code>host github.<span class="keyword">com</span>
+    <span class="built_in">hostname</span> ssh.github.<span class="keyword">com</span>
+    port <span class="number">443</span>
+</code></pre><p>更改使用新的443访问端口。</p>
+<h3 id="6&gt;_其他说明">6&gt; 其他说明</h3>
 <ul>
 <li>在搭建时，出现过需用localhost:4000/public访问资源的问题、以及生成页面空白、css访问不到等问题，出现问题一般尝试用 hexo clean ； hexo g; hexo s;重新生成。如问题仍不能解决，最终采用的是卸载hexo，重新安装配置一次。<br>注意要先把_config.xml、source、theme等文件备份。</li>
 </ul>
@@ -350,7 +360,7 @@ var duoshuoQuery = {short_name:"vin-zhou"};
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1>_安装Hexo"><span class="toc-number">1.</span> <span class="toc-text">1> 安装Hexo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2>_启用Hexo"><span class="toc-number">2.</span> <span class="toc-text">2> 启用Hexo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3>_设置Hexo"><span class="toc-number">3.</span> <span class="toc-text">3> 设置Hexo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4>_Hexo常用命令"><span class="toc-number">4.</span> <span class="toc-text">4> Hexo常用命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5>_其他说明"><span class="toc-number">5.</span> <span class="toc-text">5> 其他说明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number"></span> <span class="toc-text">参考</span></a>
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1>_安装Hexo"><span class="toc-number">1.</span> <span class="toc-text">1> 安装Hexo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2>_启用Hexo"><span class="toc-number">2.</span> <span class="toc-text">2> 启用Hexo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3>_设置Hexo"><span class="toc-number">3.</span> <span class="toc-text">3> 设置Hexo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4>_Hexo常用命令"><span class="toc-number">4.</span> <span class="toc-text">4> Hexo常用命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5>_关联Github"><span class="toc-number">5.</span> <span class="toc-text">5> 关联Github</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6>_其他说明"><span class="toc-number">6.</span> <span class="toc-text">6> 其他说明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number"></span> <span class="toc-text">参考</span></a>
  
   </div>
 
@@ -385,7 +395,7 @@ var duoshuoQuery = {short_name:"vin-zhou"};
   
   <div class="archiveslist">
     <p class="asidetitle"><a href="/archives">归档</a></p>
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">4</span></li></ul>
   </div>
 
 
