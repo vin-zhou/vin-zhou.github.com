@@ -83,4 +83,28 @@ NSAutoreleasePool *pool = [NSAutoreleasePool new];
 **推荐使用第一种方法，因为其更快！**
 
 ### Cocoa的内存管理规则
+* 如果你使用new, alloc, copy 使得 retain count值为1，那么你需负责
+给其发送 release 或 autorelease 消息。
+* 如果你使用了其他object的引用，假设其retain count 为1 且 将会被
+autorelease即可。
+* 如果你retain了一个object,你需要负责release或autorelease它。
 * 
+<table>
+    <tr>
+        <th>获得方式...</th>
+        <th> 短期使用 </th>
+        <th> 长期使用 </th>
+    </tr>
+    <tr>
+        <td>由new, alloc, copy生成 </td>
+        <td> 在使用完立即release   </td>
+        <td> 在dealloc中release   </td>
+    </tr>
+     <tr>
+        <td>其他方式</td>
+        <td> 啥都不用做 </td>
+        <td> 使用Retain获取，并在dealloc中release </td>
+    </tr>
+</table>
+
+* 其他规则
