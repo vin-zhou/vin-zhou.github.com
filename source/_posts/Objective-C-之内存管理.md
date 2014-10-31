@@ -7,10 +7,8 @@ Cocoa使用了引用计数（reference counting,也称为 retain counting)的技
 即引用数(reference count 或 retain count)。
 
 * reference count 加一的情况：
- * alloc/new
- * copy
+ * alloc/new/copy
  * 发送 retain 消息给对象, 即调用 -（id) retain函数， 如[car retain] ;
-
 
 * 减一的情况：
  * 发送 release 消息给对象, 与retain类似，调用 -（oneway void) release 函数, 如[car release]；
@@ -77,8 +75,9 @@ NSAutoreleasePool *pool = [NSAutoreleasePool new];
 ...
 [pool release];
 ```
-当你创建一个自动释放池时，它将自动变为活跃的池。在Mac OSX 10.4之后，Objective-C提供了一个更好的-drain方法，其只清空池中的对象，但
-并不会销毁池子。
+**当你创建一个自动释放池(autorelease pool)时，它将自动变为活跃的池。autorelease 采用类似栈的形式进行存储，即新建的pool将
+置于栈顶，为活跃的栈，之后的autorelease消息会将接收对象放置于栈顶的池中。**
+在Mac OSX 10.4之后，Objective-C提供了一个更好的-drain方法，其只清空池中的对象，但并不会销毁池子。
 
 **推荐使用第一种方法，因为其更快！**
 
@@ -88,23 +87,90 @@ NSAutoreleasePool *pool = [NSAutoreleasePool new];
 * 如果你使用了其他object的引用，假设其retain count 为1 且 将会被
 autorelease即可。
 * 如果你retain了一个object,你需要负责release或autorelease它。
-* 
-<table>
-    <tr>
-        <th>获得方式...</th>
-        <th> 短期使用 </th>
-        <th> 长期使用 </th>
-    </tr>
-    <tr>
-        <td>由new, alloc, copy生成 </td>
-        <td> 在使用完立即release   </td>
-        <td> 在dealloc中release   </td>
-    </tr>
-     <tr>
-        <td>其他方式</td>
-        <td> 啥都不用做 </td>
-        <td> 使用Retain获取，并在dealloc中release </td>
-    </tr>
-</table>
 
-* 其他规则
+
+
+获得方式 | 短期使用 | 长期使用
+------------ | ------------- | ------------
+由new, alloc, copy生成 | 在使用完立即release  | 在dealloc中release
+其他方式 | 啥都不用做  | 使用Retain获取，并在dealloc中release
+
+
+* 举例：
+
+```c
+    NSMutableArray * array = [[NSMutableArray alloc] init]; // alloc, 需要手动release或autorelease
+    [array release];
+```
+```c
+    // 非alloc/new/copy，因此无需考虑release
+    NSMutableArray * array = [NSMutableArray arrayWithCapcity:17]; 
+    NSColor *color = [NSColor blueColor];
+    id object = [someArray objectAtIndex: i]; 
+```
+
+### 保持pool干净
+一个例子：
+
+```c
+int i;
+for (i = 0; i< 10000000; i++)
+{
+    id object = [someArray objectAtIndex: i];
+    NSString *desc = [object descrption];
+    // and do something with the description
+}
+```
+这种写法方式只会在整个循环后，autorelease pool再释放各desc字符串; 下面是改进的写法，手动每1000子释放一次pool:
+```c
+NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+int i;
+for (i = 0; i< 10000000; i++)
+{
+    id object = [someArray objectAtIndex: i];
+    NSString *desc = [object descrption];
+    // and do something with the description
+    
+    if(i % 1000 == 0)
+    {
+        [pool release]; // 主动释放
+        pool = [[NSAutoreleasePool alloc] init]; // 新建
+    }
+}
+[pool release];
+```
+
+## Automatic Reference Counting, ARC
+* 与桌面系统不同，移动端需要更确切的垃圾回收时间，因此苹果对iOS提出了**自动引用计数（ARC)**来处理资源回收问题；当使用ARC后，可以正常的创建和使用object，由编译器在适当的地方补上retains和releases。
+* ARC不同于GC，GC是在运行时执行的，依据代码的执行，定期/不定期的检查；而ARC在编译时处理，补上retains和releases，系统并不
+关心这些代码是由手写的还是由ARC补全的。
+
+### ARC只对3类 retainable object pointers(ROPs)起作用：
+  1. Block 指针；
+  * Objective-C 对象指针；
+  * \__attribtue__((NSObject))标记的typedef  .
+  
+ 所有其他的指针如 char*, CF对象如 CFStringRef，malloc c array等，都不是ARC支持的，需要自己手动处理。
+
+### 使用ARC 需满足的3个条件
+1. 首先需要判断对象是否属于之前3类的ROPs;
+* 需指出如何retain、release对象，即大部分需继承自NSObject；
+* 提供传递对象ownership的方式。
+
+### 有时使用weak reference更合适
+* **强引用**：当你的对象参与了所指对象的内存管理，称之为 strong reference
+* **弱引用**：如果不参与，称之为 weak reference, 弱引用可防止 retain cycles。例如在A中使用 @property(assgine) B* b; 
+ B的引用计数加1， A的引用计数不会加1（强引用则都要加1），此时release A，由A release B就可以了。
+
+* 对于弱引用，如果所指的对象已经被释放了，则系统会自动清理这个引用。
+例如：
+
+```c
+   __weak NSString* myString;
+   @property(weak) NSString* myString;
+```
+
+使用ARC时要注意：
+
+* property 不能一new开头，如 @property NSString *newString 是非法的( **会报：`Property follows Cocoa naming convention for returning 'owned' objects 的错误**)； 
+### Ownership 拥有优先权
