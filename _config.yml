@@ -81,7 +81,7 @@ disqus_shortname:
 ## Themes: https://github.com/hexojs/hexo/wiki/Themes
 theme: jacman
 exclude_generator:
-Plugins:
+plugins:
 - hexo-generator-feed
 - hexo-generator-sitemap
 

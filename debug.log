@@ -1,4 +1,4 @@
-date: "2014-10-28 09:55:14.955"
+date: "2014-11-03 18:07:33.093"
 argv: node /usr/local/bin/hexo --debug
 os: Darwin 14.0.0 darwin x64
 versions:
@@ -12,11 +12,15 @@ versions:
   openssl: 1.0.1i
   hexo: 2.8.3
 ---
-[debug] 09:55:15.197 Config file loaded from /Users/zhouwenshan/Developer/git_blog/_config.yml
-[debug] 09:55:15.201 Version info checked successfully
-[debug] 09:55:15.218 Loading database.
-[debug] 09:55:15.257 Processed: draft.md (1ms)
-[debug] 09:55:15.259 Processed: page.md (3ms)
-[debug] 09:55:15.259 Processed: photo.md (3ms)
-[debug] 09:55:15.259 Processed: post.md (2ms)
-[debug] 09:55:15.262 Script load successfully: fancybox.js
+[debug] 18:07:33.328 Config file loaded from /Users/zhouwenshan/Developer/git_blog/_config.yml
+[debug] 18:07:33.333 Version info checked successfully
+[debug] 18:07:33.352 Loading database.
+[debug] 18:07:33.394 Processed: draft.md (1ms)
+[debug] 18:07:33.395 Processed: page.md (2ms)
+[debug] 18:07:33.396 Processed: photo.md (2ms)
+[debug] 18:07:33.396 Processed: post.md (2ms)
+[debug] 18:07:33.403 Plugin loaded successfully: hexo-generator-feed
+[debug] 18:07:33.408 Plugin loaded successfully: hexo-generator-sitemap
+[debug] 18:07:33.424 Plugin loaded successfully: hexo-renderer-ejs
+[debug] 18:07:33.437 Plugin loaded successfully: hexo-renderer-marked
+[debug] 18:07:33.553 Plugin loaded successfully: hexo-renderer-stylus
