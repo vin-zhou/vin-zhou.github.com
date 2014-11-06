@@ -1,6 +1,7 @@
 title: 启用Mac自带的Apache
 date: 2014-10-27 16:48:40
 tags: iOS
+categories: 技术
 ---
 
 ## 启动Apache

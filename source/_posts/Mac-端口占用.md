@@ -1,6 +1,7 @@
 title: Mac 端口占用
 date: 2014-10-29 17:07:53
-tags:
+tags: Mac
+categories: 技术
 ---
 ## 查看端口
 终端输入：

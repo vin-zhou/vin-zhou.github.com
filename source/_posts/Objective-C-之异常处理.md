@@ -1,6 +1,7 @@
 title: Objective-C 之异常处理
 date: 2014-11-03 14:31:00
 tags: iOS
+categories: 技术
 ---
 首先在Xcode的build选项中，需将 *Enable Objective-C Exceptions* 选项选为 *Yes*.
 

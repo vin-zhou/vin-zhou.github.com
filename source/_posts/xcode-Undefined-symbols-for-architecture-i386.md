@@ -1,6 +1,7 @@
 title: xcode Undefined symbols for architecture i386
 date: 2014-10-28 16:33:04
-tags: iOS
+tags: [iOS, XCode]
+categories: 技术
 ---
 ###参考了：
 

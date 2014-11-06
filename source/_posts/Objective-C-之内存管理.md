@@ -1,6 +1,7 @@
 title: Objective-C 之内存管理
 date: 2014-10-30 15:34:17
 tags: iOS
+categories: 技术
 ---
 ## 引用计数 (Reference Counting)
 Cocoa使用了引用计数（reference counting,也称为 retain counting)的技术来进行内存管理。每个对象都有一个integer成员变量，即引用计数(reference count 或 retain count)。
@@ -44,8 +45,7 @@ NSObject 提供了一个方法：
 ```objc
  - (id) autorelease;
 ```
-这个方法预定了在将来的某个时刻会调用release方法。当你发送一个autorelease消息给一个object时，实际上会将该object添加到 autorelease 池中，当这个池销毁时，池中的所有对象才会
-收到release消息。即相当于在 NSAutorleasePool 类的dealloc函数中，将会给池中的每个对象都发送一个release消息。  
+这个方法预定了在将来的某个时刻会调用release方法。当你发送一个autorelease消息给一个object时，实际上会将该object添加到 autorelease 池中，当这个池销毁时，池中的所有对象才会收到release消息。即相当于在NSAutorleasePool 类的dealloc函数中，将会给池中的每个对象都发送一个release消息。  
 例如：
 
 ```objc
@@ -55,18 +55,23 @@ NSObject 提供了一个方法：
     return ([dscription autorelease]); // 而不是 return (description).
 }
 ```
+ **Autorelease 实际上只是把对release的调用延迟了，对于每个对象调用了Autorelease,系统只是把该Object放入到当前的Autorelease pool中，当该pool被释放时，才中的Object才会被调用release。**
+
 ### 那么何时创建一个autorelease池呢？     
+
+ 对于每一个Runloop(一个UI事件、Timer Call、delegate call等)，系统会隐式创建一个 Autorelease pool， 这样所有的 release pool 会构成一个栈，在每个Runloop结束时，其对应的当前栈顶的 Autorelease pool 会被销毁， pool里的每个Object会被release.
+
 有两种方法：
 
-1. 使用 @autoreleasepool   
-  这样，所有在
+1). 使用 @autoreleasepool
 ```objc
  @autoreleasepool
 {     
 }
 ```
-  中的代码，都会被该池处理。对于内存非常敏感的计算，还可以嵌套。**需要注意的是，所有在{}内的变量，不能在之外再使用。**
-2. 使用 NSAutoreleasePool 对象    
+这样，所有在{}中的代码，都会被该池处理。对于内存非常敏感的计算，还可以嵌套。**需要注意的是，所有在{}内的变量，不能在之外再使用。**
+
+2). 使用 NSAutoreleasePool 对象    
 例如：   
 ```objc
 NSAutoreleasePool *pool = [NSAutoreleasePool new];
@@ -77,7 +82,7 @@ NSAutoreleasePool *pool = [NSAutoreleasePool new];
 置于栈顶，为活跃的栈，之后的autorelease消息会将接收对象放置于栈顶的池中。**
 在Mac OSX 10.4之后，Objective-C提供了一个更好的-drain方法，其只清空池中的对象，但并不会销毁池子。
 
-==**推荐使用第一种方法，因为其更快！**==
+== **推荐使用第一种方法，因为其更快！**==
 
 ### Cocoa的内存管理规则
 * 如果你使用new, alloc, copy 使得 retain count值为1，那么你需负责给其发送 release 或 autorelease 消息。
