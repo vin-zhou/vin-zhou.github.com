@@ -228,7 +228,13 @@ host github.com
 * 如问题仍不能解决，最终采用的是卸载hexo，重新安装配置一次。
 * 注意卸载前要先把_config.xml、source、theme等文件备份。
 
-
+## Homebrew
+ 安装方法：打开Terminal输入
+ 
+ ```objc
+  ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
+ ```
+ 以后即可使用 ``brew``安装管理其所支持的软件(如git\nodejs\等）了。
 ## 参考
 
 * [如何搭建一个独立博客](http://cnfeat.com/2014/05/10/2014-05-11-how-to-build-a-blog/)
