@@ -37,7 +37,7 @@ Cocoa使用了引用计数（reference counting,也称为 retain counting)的技
         engine = newEngine;
    }
 ```
- 即在accessor函数中，需要先retian新对象，再release旧对象，防止当newEngine与engine为同一对象时出现错误。
+ 即在accessor函数中，需要**先retian新对象，再release旧对象，防止当newEngine与engine为同一对象时出现错误**。
  
 ## Autorelease
 NSObject 提供了一个方法：
