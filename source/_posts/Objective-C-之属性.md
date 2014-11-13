@@ -14,7 +14,6 @@ date: 2014-11-09 22:26:46
 }
 @property float rainHandling;
 @end // AllWeatherRadial.h
-```language
 ```
 等效于在头文件中声明2个方法：
 ```objc
