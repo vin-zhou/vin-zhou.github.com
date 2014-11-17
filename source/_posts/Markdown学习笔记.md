@@ -1,6 +1,6 @@
 title: Markdown学习笔记
 date: 2014-10-24 09:25:50
-tags: Hexo
+tags: [Hexo, Markdown]
 categories: 技术
 ---
 ##引言

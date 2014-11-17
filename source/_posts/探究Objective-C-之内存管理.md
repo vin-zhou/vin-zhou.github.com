@@ -1,4 +1,4 @@
-title: Objective-C 之内存管理
+title: 探究Objective-C 之内存管理
 date: 2014-10-30 15:34:17
 tags: iOS
 categories: 技术

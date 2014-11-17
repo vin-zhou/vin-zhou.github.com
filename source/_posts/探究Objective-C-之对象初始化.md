@@ -1,4 +1,4 @@
-title: Objective-C-之对象初始化
+title: 探究Objective-C-之对象初始化
 date: 2014-11-06 21:54:36
 tags: iOS
 categories: 技术
