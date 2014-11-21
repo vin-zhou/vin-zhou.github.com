@@ -109,7 +109,7 @@ google_cse:
   
   
 #### Analytics
-baidu_analytics: true
+baidu_analytics: false
 ## enable: false
 ## id:        ## e.g. UA-46321946-2 your google analytics ID.
 ##  site:      ## e.g. wuchong.me your google analytics site or set the value as auto.

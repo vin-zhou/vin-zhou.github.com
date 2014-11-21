@@ -95,30 +95,55 @@ NSString对象的retain非常特殊。具体可参考：[Objective-C中NSString�
 ```objc
 #import <Foundation/Foundation.h>
 
-@interface TestObj : NSObject<NSCopying>
-{
-    int i;
-}
-@property int i;
+@interface Tire : NSObject<NSCopying>
 
+@property float pressure;
+@property float treadDepth;
+
+// ... methods;
+- (void) initWithPressure:(float)pressure treadDepth:(float) treadDepth;
 - (id)copyWithZone:(NSZone *)zone;
 
 @end
 ----------------
-#import "TestObj.h"
+#import "Tire.h"
 
 @implementation TestObj
 
-@synthesize i = _i;
-
 -(id)copyWithZone:(NSZone *)zone
 {
-    TestObj *copy = [[TestObj alloc ]init];
-    copy->i = _i;
+    Tire *copy = [[[self class] allocWithZone:zone]initWithPressure:pressure
+     treadDepth: treadDepth];
+
     return copy;
 }
 @end
 ```
+这里使用了类方法 ``+ (id) allocWithZone: (NSZone *) zone;``，这个消息将被发送到类，而不是实例。 这里使用了``[self class]``而不是``Tire``，是因为拷贝时，如果是给其子类发送消息，则将无法拷贝其子类的完整信息。
+这里调用了``initWithPressure:treadDepth:``方法，也可以先调用``init``，再手动赋值：
+```objc
+ copy.pressure = pressure;
+ copy.treadDepth = readDepth;
+```
+**对于子类,其实现Copying的例子如下：**
+```objc
+@interface AllWeatherRadial : Tire
+// ... propertie
+@property float rainHandling;
+@property float snowHandling;
+// ... methods
+@end // AllWeatherRadial
+-----------------------
+-(id)copyWithZone: (NSZone *) zone
+{
+	AllWeatherRadial *tireCopy;
+    tireCopy = [super copyWithZone : zone];
+    tireCopy.rainHandling = rainHandling;
+    tireCopy.snowHandling = snowHandling;
+    return tireCopy;
+}
+```
+因为AllWeatherRadial继承自一个已实现NSCopying的父类，因此.h里不必再做``<NSCopying>``协议声明，而且.m中也没有使用之前的[[self class]allocWithZone]方法，而是使用了父类的copyWithZone方法，由于该方法返回的[self class]类型，因此符合AllWeatherRadial。之后，手动给新添加的属性赋值。
 
 ### NSMutableCopying
  对于mutable对象，实现的是NSMutableCopying协议，苹果官网[NSMutableCopying](https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Protocols/NSMutableCopying_Protocol/index.html#//apple_ref/doc/uid/TP40003783)。

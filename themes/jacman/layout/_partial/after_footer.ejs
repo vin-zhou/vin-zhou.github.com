@@ -1,4 +1,5 @@
 <script src="<%- config.root %>js/jquery-2.0.3.min.js"></script>
+
 <script type="text/javascript">
 $(document).ready(function(){ 
   $('.navbar').click(function(){
@@ -184,8 +185,9 @@ $(document).ready(function(){
 <% } %>
 
 <% if (theme.baidu_analytics.enable){ %>
-<%- partial('baidu_analytics') %>
+//<%- partial('baidu_analytics') %>
 <% } %>
+
 
 <% if (theme.totop){ %>
 <%- partial('totop') %>
