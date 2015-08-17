@@ -71,6 +71,17 @@ $ git rm XX_file_name  // 版本库中删除
 $ git checkout -- XX_file_name // 版本库中恢复
 ```
 
+## 强制添加文件/文件夹为tracked状态
+```
+$ git add -f "" // 强制添加文件/文件夹为tracked状态
+```
+
+## 解除文件/文件夹为tracked状态
+```
+$ git rm --cache "" // 解除文件为tracked状态
+$ git rm -r --cache "" // 解除文件夹为tracked状态
+```
+
 ## 创建分支
 ```
 $ git branch XX_branch_name // 创建分支

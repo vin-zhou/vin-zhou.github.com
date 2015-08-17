@@ -243,6 +243,7 @@ host github.com
 * 在搭建时，出现过需用localhost:4000/public访问资源的问题、以及生成页面空白、css访问不到等问题，出现问题一般尝试用 hexo clean ； hexo g; hexo s;重新生成。
 * 如问题仍不能解决，最终采用的是卸载hexo，重新安装配置一次。
 * 注意卸载前要先把_config.xml、source、theme等文件备份。
+* **有关如何管理Hexo至GitHub, 多台电脑同步处理Hexo**， 参见文章：[在多台mac上处理Hexo博客](http://vin-zhou.github.io/2014/10/29/%E5%9C%A8%E5%A4%9A%E5%8F%B0mac%E4%B8%8A%E5%A4%84%E7%90%86Hexo%E5%8D%9A%E5%AE%A2/)
 
 ## Homebrew
  安装方法：打开Terminal输入

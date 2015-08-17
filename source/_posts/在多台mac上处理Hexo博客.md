@@ -13,7 +13,7 @@ categories: 技术
 下面给出具体步骤。
 
 ## 建立关系
-（假定创建博客的mac为A，其他另一个mac为B)
+（假定最初创建博客的mac为A，其他另一个mac为B)
 
 1)  在A中的git_blog目录下，建立source分支：
 ```c
@@ -23,6 +23,9 @@ $ git remote -v //查看远程分支名字
  // 我的内容为如下，说明已绑定
  // origin    git@github.com:vin-zhou/vin-zhou.github.com.git (fetch)
  // origin	git@github.com:vin-zhou/vin-zhou.github.com.git (push)
+ 
+修改.gitignore文件，添加"public/"字段至其中。
+
 $ git push origin source // 将当前git_blog下的内容push到Github上的远程仓库的source分支（会自动创建）上
 ```
 2)  在B中建立git_blog目录，安装npm，安装Hexo，添加SSH，然后使用
@@ -33,9 +36,10 @@ $ git clone -b source git@github.com:vin-zhou/vin-zhou.github.com.git
 
 ## 使用方法
 
-1. 在任意一台mac(如A)，使用Hexo的new、g、d方法添加、生成、部署新的博客，内容都会被同步自动放到Github的master分支上；  
+ ###原则：在任意一台mac操作，都需先切换并保持在source分支上。使用git命令管理source文件；使用Hexo命令进行同步至远程master分支，无需处理本地master分支###
+1.  在A中使用Hexo的new、g、d方法添加、生成、部署新的博客，内容都会被同步自动放到Github的master分支上；  
 
-2. 在1>.之后，保证git当前在git_blog下的source分支下，  
+2. 在1>.之后，同样保证B的git当前在git_blog下的source分支下，  
 先使用：
 ```c
 $ git pull origin source
@@ -46,7 +50,7 @@ $ git add -u
 $ git commit -m ""
 $ git push origin source
 ```
-将新内容提交至Github的source分支上。
+将新内容提交至Github的source分支上，完成source管理。
 
 ## 其他说明
 * 可以使用 
