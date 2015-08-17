@@ -9,25 +9,25 @@ categories: 技术
 1.打开 terminal, 输入
 
 ```javascript
-  sudo apchectl -v // 查看内置的Apache版本
+  sudo apachectl -v // 查看内置的Apache版本
 ```
 2.接着启动Apache
 
 ```javascript
-  sudo apchectl start // 启动
+  sudo apachectl start // 启动
 ```
 3.查看Apache是否成功启用
 
 ```javascript
-  sudo apchectl -t  // 查看情况
+  sudo apachectl -t  // 查看情况
 ```
  
 其他命令：
 
 ```javascript
-  sudo apchectl restart // 重启动
+  sudo apachectl restart // 重启动
 
-  sudo apchectl stop // 关闭
+  sudo apachectl stop // 关闭
 ```
 
 4.在浏览器中输入 “http://localhost”, 可以看到内容为“It works!”的页面。其位于“/Library/WebServer/Documents/”下，**这就是Apache的默认根目录。**   

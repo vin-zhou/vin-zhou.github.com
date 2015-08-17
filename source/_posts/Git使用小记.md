@@ -93,6 +93,12 @@ $ git merge XX_branch_name // 合并分支 XX_branch_name 到当前分支
 ```
 $ git branch -d XX_branch_name // 删除分支
 ```
+
+## 对比不同分支的同一文件
+如对比文件 config/environment.m 在branch1\branch2中：
+```
+git difftool branch1:config/environment.m branch2:config/environment.m
+```
 ## 分支的管理策略
 
 在实际开发中，我们应该按照几个基本原则进行分支管理：

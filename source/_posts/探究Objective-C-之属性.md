@@ -44,7 +44,9 @@ date: 2014-11-09 22:26:46
 
 如果.h或.m中没有声明这些变量，编译器会创建他们。因此可以把``{float rainHandling;}``从.h或.m文件中移除，只保留@property , @synthesize。
 
-在Xcode4.5及以后的版本中，可以省略@synthesize这句，编译器会自动帮你加setter/getter方法，并且会默认访问_rainHandling这个成员变量，如果找不到，则会自动生成一个该名字的私有成员变量。但@synthesize可以定义与变量名不相同的set/get的命令,如``@synthesize rainHandling = anotherName``，在.m中以anotherName(而不是self.rainHandling)进行访问、赋值操作，保护变量不会被不恰当的访问。
+在Xcode4.5及以后的版本中，可以省略@synthesize这句，编译器会自动帮你加setter/getter方法，并且会默认访问_rainHandling这个成员变量，如果找不到，则会自动生成一个该名字的私有成员变量。但@synthesize可以定义与变量名不相同的set/get的命令,如``@synthesize rainHandling = anotherName``，在.m中以anotherName(而不是self.rainHandling)进行访问、赋值操作，通常anotherName为：
+  * interface{}中声明的一个变量，使得property 与该变量一致；
+  * 在.m中声明的另一个变量，用来改写读写等属性权限；
 
 调用 self.rainHandling = 1.0f;实质上调用的是rainHandling的setter函数，即``[self setRainHandling:1.0f];``。
 

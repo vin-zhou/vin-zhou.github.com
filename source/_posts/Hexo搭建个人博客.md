@@ -191,6 +191,22 @@ Objective-C的高亮效果如下：
 }
 ```
 
+## 添加统计
+
+这里使用[站长统计](http://zhanzhang.cnzz.com/)
+1. 申请站长统计帐号，登录后，点击 全站分析->左下方的设置->获取代码，录入网站地址，后得到统计的js代码；
+2. 在footer.ejs中， 末尾添加js代码：
+```js
+<div id="footer">
+......
+
+		<p class="copyright">
+		<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1253589886'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1253589886%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));</script>
+		</p>
+   </div>     
+```
+完成。
+
 ## Hexo常用命令
 
 ```c
