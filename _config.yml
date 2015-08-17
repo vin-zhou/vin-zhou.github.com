@@ -106,4 +106,4 @@ compress: true
 deploy:
   type: github
   repository: git@github.com:vin-zhou/vin-zhou.github.com.git
-  branch: master
+  branch: source
