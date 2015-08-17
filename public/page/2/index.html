@@ -1,0 +1,444 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>没有什么能够阻挡</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Vin Zhou">
+    
+    <meta name="description" content="tech">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="没有什么能够阻挡" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="没有什么能够阻挡" title="没有什么能够阻挡"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="没有什么能够阻挡">没有什么能够阻挡</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:vin-zhou.github.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main">
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/11/20/探究Objective-C-之协议/" title="探究Objective-C 之协议" itemprop="url">
+  
+    <h1 itemprop="name">探究Objective-C 之协议</h1>
+    
+     
+           <p itemprop="description" >Objective-C提供的协议（Protocol）类似于Java中的接口（interface）,提供了一种扩展方法和属性的方式。在采用了（adopt）协议后，需要实现协议中所有的方法，否则编译器会报warning。因此Protocol通常要根据功能，其声明的方法要少且有内聚性。</p>
+        
+    
+    <time datetime="2014-11-20T09:01:42.000Z" itemprop="datePublished">11月 20 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/11/20/探究Objective-C-之消息/" title="探究Objective-C 之消息" itemprop="url">
+  
+    <h1 itemprop="name">探究Objective-C 之消息</h1>
+    
+     
+           <p itemprop="description" >参考
+
+深入浅出Cocoa之消息，写得非常好，感谢原作者辛勤工作！</p>
+        
+    
+    <time datetime="2014-11-20T08:46:26.000Z" itemprop="datePublished">11月 20 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/11/17/探究Objective-C-之深浅拷贝/" title="探究Objective-C 之深浅拷贝" itemprop="url">
+  
+    <h1 itemprop="name">探究Objective-C 之深浅拷贝</h1>
+    
+     
+           <p itemprop="description" >c中的浅拷贝与深拷贝
+浅拷贝
+  c中的浅拷贝就是对内存地址的复制，让目标对象指针和源对象指向同一片内存空间。如：
+12char *str = (char*)malloc(100);char* str2 = str;
+
+ 浅拷贝只是对对象的简单拷贝，让几个对象共用同一片内存，当内</p>
+        
+    
+    <time datetime="2014-11-17T07:03:24.000Z" itemprop="datePublished">11月 17 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/11/14/探究Objective-C-之分类（Categories）/" title="探究Objective-C 之分类（Categories）" itemprop="url">
+  
+    <h1 itemprop="name">探究Objective-C 之分类（Categories）</h1>
+    
+     
+           <p itemprop="description" >Objective-C提供了category机制来支持给已有类添加新方法。其作用主要有3点：
+
+将类的实现分散到多个不同文件或多个不同框架中
+创建私有方法的前向引用
+向对象添加非正式协议
+
+将类的实现分散到多个不同文件或多个不同框架中
+category的基本语法：
+1234567</p>
+        
+    
+    <time datetime="2014-11-14T08:32:14.000Z" itemprop="datePublished">11月 14 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/11/09/探究Objective-C-之属性/" title="探究Objective-C 之属性" itemprop="url">
+  
+    <h1 itemprop="name">探究Objective-C 之属性</h1>
+    
+     
+           <p itemprop="description" >在Objective-C 2.0，Apple提出了@property，一种成员变量属性标记语法，可以减少大量无谓的setter/getter代码。
+@property @synthesize
+如可以对AllWeatherRadial的变量rainingHandling添加@pro</p>
+        
+    
+    <time datetime="2014-11-09T14:26:46.000Z" itemprop="datePublished">11月 9 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/11/07/开源资料/" title="开源资料" itemprop="url">
+  
+    <h1 itemprop="name">开源资料</h1>
+    
+     
+           <p itemprop="description" >开源资料
+粉笔网iPhone端使用的第三方开源库使用cocoapods管理Xcode开源库</p>
+        
+    
+    <time datetime="2014-11-07T10:00:40.000Z" itemprop="datePublished">11月 7 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/11/07/Xcode-编译设置/" title="Xcode 编译设置" itemprop="url">
+  
+    <h1 itemprop="name">Xcode 编译设置</h1>
+    
+     
+           <p itemprop="description" >Parameter
+说明
+
+
+
+
+Link With Standard Libraries = YES
+用标准库连接
+
+
+info.plist Output Encoding = binary
+Info.plist输出编码为二进制
+
+
+GCC_ENABLE_OBJC_GC = u</p>
+        
+    
+    <time datetime="2014-11-07T03:40:19.000Z" itemprop="datePublished">11月 7 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/11/06/探究Objective-C-之对象初始化/" title="探究Objective-C-之对象初始化" itemprop="url">
+  
+    <h1 itemprop="name">探究Objective-C-之对象初始化</h1>
+    
+     
+           <p itemprop="description" >分配对象空间
+Allocation: 给一个类发送alloc消息将会导致该类分配一块足够大的内存空间来存放其所有实例；同时内存会被初始化设为0.即：BOOL被设为NO； int 设为0；float 设为 0.0；指针设为 nil.
+一个被alloc的对象并不能马上使用，还需要调用</p>
+        
+    
+    <time datetime="2014-11-06T13:54:36.000Z" itemprop="datePublished">11月 6 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/11/06/iOS开发不错的网站/" title="iOS开发不错的网站" itemprop="url">
+  
+    <h1 itemprop="name">iOS开发不错的网站</h1>
+    
+     
+           <p itemprop="description" >Cocos2d游戏类：泰然论坛： http://www.ityran.com/forum-61-1.html 
+
+社区类：开源中国iOS开发专区： http://www.oschina.net/iosiOS开发者论坛:  http://www.codeios.com/ 
+
+综合类</p>
+        
+    
+    <time datetime="2014-11-06T09:14:21.000Z" itemprop="datePublished">11月 6 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/11/03/iOS-Xcode-使用备忘录/" title="iOS/Xcode 使用备忘录" itemprop="url">
+  
+    <h1 itemprop="name">iOS/Xcode 使用备忘录</h1>
+    
+     
+           <p itemprop="description" >设置main函数输入参数：Product-&amp;gt;EditSceme-&amp;gt;Arguments
+调试时，可以直接在console中输入：
+
+
+查看变量： po 变量名
+查看属性： po (int)[item retainCount]
+查看数组： po [array object</p>
+        
+    
+    <time datetime="2014-11-03T09:26:47.000Z" itemprop="datePublished">11月 3 2014</time>
+  </a>
+</section>
+
+
+  <nav id="page-nav" class="clearfix">
+    <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
+  </nav>
+
+</div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/想法/" title="想法">想法<sup>1</sup></a></li>
+		
+			<li><a href="/categories/技术/" title="技术">技术<sup>26</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/iOS/" title="iOS">iOS<sup>22</sup></a></li>
+		
+			<li><a href="/tags/Xcode/" title="Xcode">Xcode<sup>3</sup></a></li>
+		
+			<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>3</sup></a></li>
+		
+			<li><a href="/tags/Git/" title="Git">Git<sup>1</sup></a></li>
+		
+			<li><a href="/tags/开源/" title="开源">开源<sup>1</sup></a></li>
+		
+			<li><a href="/tags/app-碎片整理/" title="app, 碎片整理">app, 碎片整理<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">8</span></li></ul>
+  </div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Git/" style="font-size: 10.00px;">Git</a><a href="/tags/Hexo/" style="font-size: 15.00px;">Hexo</a><a href="/tags/Mac/" style="font-size: 10.00px;">Mac</a><a href="/tags/Markdown/" style="font-size: 10.00px;">Markdown</a><a href="/tags/Vim/" style="font-size: 10.00px;">Vim</a><a href="/tags/Xcode/" style="font-size: 15.00px;">Xcode</a><a href="/tags/app-碎片整理/" style="font-size: 10.00px;">app, 碎片整理</a><a href="/tags/iOS/" style="font-size: 20.00px;">iOS</a><a href="/tags/开源/" style="font-size: 10.00px;">开源</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+      <li><a href="http://www.njiang.cn/" target="_blank" title="Mentor楠哥的网站">Mentor楠哥的网站</a></li>
+    </ul>
+    <ul> <b> 值得关注的网站 </b>
+      <li><a href="http://blog.fens.me/series/" target="_blank" title="粉丝日志">粉丝日志</a></li>
+    </ul>
+    <ul> <b> 其他 </b>
+      <li><a href="http://wuchong.me" target="_blank" title="WuChong">Jark's Blog</a></li>
+      <li><a href="http://hexo.io" target="_blank" title="Hexo">Hexo</a></li>
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello, I&#39;m Vin. <br/>
+			Life is so beautiful. Never too late to learn.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Pacman">Jacman</a> © 2015 
+		
+		<a href="http://vin-zhou.github.com/about" target="_blank" title="Vin Zhou">Vin Zhou</a>
+		
+		</p>
+		<p class="copyright">
+		<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1253589886'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1253589886%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));</script>
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="totop">
+<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+</div>
+
+<script src="/js/totop.js"></script>
+
+
+
+
+  </body>
+ </html>

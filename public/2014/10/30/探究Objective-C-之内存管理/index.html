@@ -1,0 +1,590 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>探究Objective-C 之内存管理 | 没有什么能够阻挡</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Vin Zhou">
+    
+    <meta name="description" content="引用计数 (Reference Counting)
+Cocoa使用了引用计数（reference counting,也称为 retain counting)的技术来进行内存管理。每个对象都有一个integer成员变量，即引用计数(reference count 或 retain count)。
+
+r">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="没有什么能够阻挡" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="没有什么能够阻挡" title="没有什么能够阻挡"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="没有什么能够阻挡">没有什么能够阻挡</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:vin-zhou.github.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/10/30/探究Objective-C-之内存管理/" title="探究Objective-C 之内存管理" itemprop="url">探究Objective-C 之内存管理</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://vin-zhou.github.com/about" title="Vin Zhou" target="_blank" itemprop="author">Vin Zhou</a>
+		
+  <p class="article-time">
+    <time datetime="2014-10-30T07:34:17.000Z" itemprop="datePublished"> 发表于 10月 30 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引用计数_(Reference_Counting)"><span class="toc-number">1.</span> <span class="toc-text">引用计数 (Reference Counting)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对象所有权（Object_Ownership)"><span class="toc-number">2.</span> <span class="toc-text">对象所有权（Object Ownership)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Autorelease"><span class="toc-number">3.</span> <span class="toc-text">Autorelease</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#那么何时创建一个autorelease池呢？"><span class="toc-number">3.1.</span> <span class="toc-text">那么何时创建一个autorelease池呢？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cocoa的内存管理规则"><span class="toc-number">3.2.</span> <span class="toc-text">Cocoa的内存管理规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#保持pool干净"><span class="toc-number">3.3.</span> <span class="toc-text">保持pool干净</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Automatic_Reference_Counting,_ARC"><span class="toc-number">4.</span> <span class="toc-text">Automatic Reference Counting, ARC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ARC只对3类_retainable_object_pointers(ROPs)起作用："><span class="toc-number">4.1.</span> <span class="toc-text">ARC只对3类 retainable object pointers(ROPs)起作用：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用ARC_需满足的3个条件"><span class="toc-number">4.2.</span> <span class="toc-text">使用ARC 需满足的3个条件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#有时使用weak_reference更合适"><span class="toc-number">4.3.</span> <span class="toc-text">有时使用weak reference更合适</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ownership_拥有优先权"><span class="toc-number">4.4.</span> <span class="toc-text">Ownership 拥有优先权</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="引用计数_(Reference_Counting)">引用计数 (Reference Counting)</h2>
+<p>Cocoa使用了引用计数（reference counting,也称为 retain counting)的技术来进行内存管理。每个对象都有一个integer成员变量，即引用计数(reference count 或 retain count)。</p>
+<ul>
+<li><p>reference count 加一的情况：</p>
+<ul>
+<li>alloc/new/copy</li>
+<li>发送 retain 消息给对象, 即调用 -（id) retain函数， 如[car retain] ;</li>
+</ul>
+</li>
+<li><p>减一的情况：</p>
+<ul>
+<li>发送 release 消息给对象, 与retain类似，调用 -（oneway void) release 函数, 如[car release]；</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>当count值=0时，将会自动给该对象发送一个dealloc消息，调用其dealloc函数，将其占用的内存返还给系统。千万不要直接调用dealloc，而应该由Objective-C来调。</li>
+</ul>
+<h2 id="对象所有权（Object_Ownership)">对象所有权（Object Ownership)</h2>
+<p>一个对象包含指向其他对象的成员变量，则该对象对所指对象拥有所有权。<br>例如，对于Car对象，包含一个Engine* engine;成员变量</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">Car</span></span></div><div class="line">{</div><div class="line">    Engine* engine;</div><div class="line">}</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+
+<p>对于engine的accessor函数，则应该如此设置：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>) setEngine: (Engine *) newEngine</div><div class="line">{</div><div class="line">     [newEngine retain];</div><div class="line">     [engine release];</div><div class="line">     engine = newEngine;</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p> 即在accessor函数中，需要<strong>先retian新对象，再release旧对象，防止当newEngine与engine为同一对象时出现错误</strong>。</p>
+<h2 id="Autorelease">Autorelease</h2>
+<p>NSObject 提供了一个方法：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">id</span>) autorelease;</div></pre></td></tr></table></figure>
+
+<p>这个方法预定了在将来的某个时刻会调用release方法。当你发送一个autorelease消息给一个object时，实际上会将该object添加到 autorelease 池中，当这个池销毁时，池中的所有对象才会收到release消息。即相当于在NSAutorleasePool 类的dealloc函数中，将会给池中的每个对象都发送一个release消息。<br>例如：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">NSString</span> *) description</div><div class="line">{</div><div class="line">    <span class="built_in">NSString</span> *description = [[<span class="built_in">NSString</span> alloc] initWithFormat:<span class="string">@"I am %d years old"</span>, <span class="number">4</span>];</div><div class="line">    <span class="keyword">return</span> ([dscription autorelease]); <span class="comment">// 而不是 return (description).</span></div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p> <strong>Autorelease 实际上只是把对release的调用延迟了，对于每个对象调用了Autorelease,系统只是把该Object放入到当前的Autorelease pool中，当该pool被释放时，才中的Object才会被调用release。</strong></p>
+<h3 id="那么何时创建一个autorelease池呢？">那么何时创建一个autorelease池呢？</h3>
+<p> 对于每一个Runloop(一个UI事件、Timer Call、delegate call等)，系统会隐式创建一个 Autorelease pool， 这样所有的 release pool 会构成一个栈，在每个Runloop结束时，其对应的当前栈顶的 Autorelease pool 会被销毁， pool里的每个Object会被release.</p>
+<p>有两种方法：</p>
+<p>1). 使用 @autoreleasepool</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"> <span class="keyword">@autoreleasepool</span></div><div class="line">{     </div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>这样，所有在{}中的代码，都会被该池处理。对于内存非常敏感的计算，还可以嵌套。<strong>需要注意的是，所有在{}内的变量，不能在之外再使用。</strong></p>
+<p>2). 使用 NSAutoreleasePool 对象<br>例如：   </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSAutoreleasePool</span> *pool = [<span class="built_in">NSAutoreleasePool</span> new];</div><div class="line">...</div><div class="line">[pool release];</div></pre></td></tr></table></figure>
+
+<p><strong>当你创建一个自动释放池(autorelease pool)时，它将自动变为活跃的池。autorelease 采用类似栈的形式进行存储，即新建的pool将<br>置于栈顶，为活跃的栈，之后的autorelease消息会将接收对象放置于栈顶的池中。</strong><br>在Mac OSX 10.4之后，Objective-C提供了一个更好的-drain方法，其只清空池中的对象，但并不会销毁池子。</p>
+<p>== <strong>推荐使用第一种方法，因为其更快！</strong>==</p>
+<h3 id="Cocoa的内存管理规则">Cocoa的内存管理规则</h3>
+<ul>
+<li>如果你使用new, alloc, copy 使得 retain count值为1，那么你需负责给其发送 release 或 autorelease 消息。</li>
+<li>如果你使用了其他object的引用，假设其retain count 为1 且 将会被autorelease即可。</li>
+<li>如果你retain了一个object,你需要负责release或autorelease它。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>获得方式</th>
+<th>短期使用</th>
+<th>长期使用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>由new, alloc, copy生成</td>
+<td>在使用完立即release</td>
+<td>在dealloc中release</td>
+</tr>
+<tr>
+<td>其他方式</td>
+<td>啥都不用做</td>
+<td>使用Retain获取，并在dealloc中release</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>举例：</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSMutableArray</span> * array = [[<span class="built_in">NSMutableArray</span> alloc] init]; <span class="comment">// alloc, 需要手动release或autorelease</span></div><div class="line">[array release];</div></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 非alloc/new/copy，因此无需考虑release</span></div><div class="line"><span class="built_in">NSMutableArray</span> * array = [<span class="built_in">NSMutableArray</span> arrayWithCapcity:<span class="number">17</span>]; </div><div class="line">NSColor *color = [NSColor blueColor];</div><div class="line"><span class="keyword">id</span> object = [someArray objectAtIndex: i];</div></pre></td></tr></table></figure>
+
+<h3 id="保持pool干净">保持pool干净</h3>
+<p>一个例子：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> i;</div><div class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i&lt; <span class="number">10000000</span>; i++)</div><div class="line">{</div><div class="line">    <span class="keyword">id</span> object = [someArray objectAtIndex: i];</div><div class="line">    <span class="built_in">NSString</span> *desc = [object descrption];</div><div class="line">    <span class="comment">// and do something with the description</span></div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>这种写法方式只会在整个循环后，autorelease pool再释放各desc字符串; 下面是改进的写法，手动每1000子释放一次pool:</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSAutoreleasePool</span> *pool = [[<span class="built_in">NSAutoreleasePool</span> alloc] init];</div><div class="line"><span class="keyword">int</span> i;</div><div class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i&lt; <span class="number">10000000</span>; i++)</div><div class="line">{</div><div class="line">    <span class="keyword">id</span> object = [someArray objectAtIndex: i];</div><div class="line">    <span class="built_in">NSString</span> *desc = [object descrption];</div><div class="line">    <span class="comment">// and do something with the description</span></div><div class="line">    </div><div class="line">    <span class="keyword">if</span>(i % <span class="number">1000</span> == <span class="number">0</span>)</div><div class="line">    {</div><div class="line">        [pool release]; <span class="comment">// 主动释放</span></div><div class="line">        pool = [[<span class="built_in">NSAutoreleasePool</span> alloc] init]; <span class="comment">// 新建</span></div><div class="line">    }</div><div class="line">}</div><div class="line">[pool release];</div></pre></td></tr></table></figure>
+
+<h2 id="Automatic_Reference_Counting,_ARC">Automatic Reference Counting, ARC</h2>
+<ul>
+<li>与桌面系统不同，移动端需要更确切的垃圾回收时间，因此苹果对iOS提出了<strong>自动引用计数（ARC)</strong>来处理资源回收问题；当使用ARC后，可以正常的创建和使用object，由编译器在适当的地方补上retains和releases。</li>
+<li>ARC不同于GC，GC是在运行时执行的，依据代码的执行，定期/不定期的检查；而ARC在编译时处理，补上retains和releases，系统并不<br>关心这些代码是由手写的还是由ARC补全的。</li>
+</ul>
+<h3 id="ARC只对3类_retainable_object_pointers(ROPs)起作用：">ARC只对3类 retainable object pointers(ROPs)起作用：</h3>
+<ol>
+<li>Block 指针；</li>
+<li>Objective-C 对象指针；</li>
+<li><p>_<em>attribtue_</em>((NSObject))标记的typedef .     </p>
+<p>所有其他的指针如 char*, CF对象如 CFStringRef，malloc c array等，都不是ARC支持的，需要自己手动处理。</p>
+</li>
+</ol>
+<h3 id="使用ARC_需满足的3个条件">使用ARC 需满足的3个条件</h3>
+<ol>
+<li>首先需要判断对象是否属于之前3类的ROPs;</li>
+<li>需指出如何retain、release对象，即大部分需继承自NSObject；</li>
+<li>提供传递对象ownership的方式。</li>
+</ol>
+<h3 id="有时使用weak_reference更合适">有时使用weak reference更合适</h3>
+<ul>
+<li><strong>强引用</strong>：当你的对象参与了所指对象的内存管理，称之为 strong reference</li>
+<li><p><strong>弱引用</strong>：如果不参与，称之为 weak reference, 弱引用可防止 retain cycles。例如在A中使用 @property(assgine) B* b;<br>B的引用计数加1， A的引用计数不会加1（强引用则都要加1），此时release A，由A release B就可以了。</p>
+</li>
+<li><p>对于弱引用，如果所指的对象已经被释放了，则系统会自动清理这个引用。<br>例如：</p>
+</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">__<span class="keyword">weak</span> <span class="built_in">NSString</span>* myString;</div><div class="line"><span class="keyword">@property</span>(<span class="keyword">weak</span>) <span class="built_in">NSString</span>* myString;</div></pre></td></tr></table></figure>
+
+<p>使用ARC时要注意：</p>
+<ul>
+<li>property 不能一new开头，如 @property NSString <em>newString 是非法的( <em>*会报：`Property follows Cocoa naming convention for returning ‘owned’ objects 的错误</em></em>)；</li>
+</ul>
+<h3 id="Ownership_拥有优先权">Ownership 拥有优先权</h3>
+<ul>
+<li>使用 __bridge 、__bridge_retained、__bridge_transfer 进行ROP对象和非ROP对象的转化。</li>
+<li>在ARC管理时，不能调用的方法：<ul>
+<li>不能调用的方法： retain、retainCount、 release、 autorelease、 dealloc</li>
+<li>不能重写的方法： retain、retainCount、release、 autorelease.</li>
+<li>NSAutoreleasePool也不能使用</li>
+</ul>
+</li>
+</ul>
+<h2 id="参考">参考</h2>
+<ul>
+<li>《Learn Objective C on the Mac 2nd Edition》</li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/技术/">技术</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a>
+  </div>
+
+</div>
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://vin-zhou.github.com/2014/10/30/探究Objective-C-之内存管理/" data-title="探究Objective-C 之内存管理 | 没有什么能够阻挡" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/11/03/探究Objective-C-之异常处理/" title="探究Objective-C 之异常处理">
+  <strong>上一篇：</strong><br/>
+  <span>
+  探究Objective-C 之异常处理</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/10/29/Mac-端口占用/"  title="Mac 端口占用">
+ <strong>下一篇：</strong><br/> 
+ <span>Mac 端口占用
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+<div class="ds-thread"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"vin-zhou"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引用计数_(Reference_Counting)"><span class="toc-number">1.</span> <span class="toc-text">引用计数 (Reference Counting)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对象所有权（Object_Ownership)"><span class="toc-number">2.</span> <span class="toc-text">对象所有权（Object Ownership)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Autorelease"><span class="toc-number">3.</span> <span class="toc-text">Autorelease</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#那么何时创建一个autorelease池呢？"><span class="toc-number">3.1.</span> <span class="toc-text">那么何时创建一个autorelease池呢？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cocoa的内存管理规则"><span class="toc-number">3.2.</span> <span class="toc-text">Cocoa的内存管理规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#保持pool干净"><span class="toc-number">3.3.</span> <span class="toc-text">保持pool干净</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Automatic_Reference_Counting,_ARC"><span class="toc-number">4.</span> <span class="toc-text">Automatic Reference Counting, ARC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ARC只对3类_retainable_object_pointers(ROPs)起作用："><span class="toc-number">4.1.</span> <span class="toc-text">ARC只对3类 retainable object pointers(ROPs)起作用：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用ARC_需满足的3个条件"><span class="toc-number">4.2.</span> <span class="toc-text">使用ARC 需满足的3个条件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#有时使用weak_reference更合适"><span class="toc-number">4.3.</span> <span class="toc-text">有时使用weak reference更合适</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ownership_拥有优先权"><span class="toc-number">4.4.</span> <span class="toc-text">Ownership 拥有优先权</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/想法/" title="想法">想法<sup>1</sup></a></li>
+		
+			<li><a href="/categories/技术/" title="技术">技术<sup>26</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/iOS/" title="iOS">iOS<sup>22</sup></a></li>
+		
+			<li><a href="/tags/Xcode/" title="Xcode">Xcode<sup>3</sup></a></li>
+		
+			<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>3</sup></a></li>
+		
+			<li><a href="/tags/Git/" title="Git">Git<sup>1</sup></a></li>
+		
+			<li><a href="/tags/开源/" title="开源">开源<sup>1</sup></a></li>
+		
+			<li><a href="/tags/app-碎片整理/" title="app, 碎片整理">app, 碎片整理<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">8</span></li></ul>
+  </div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Git/" style="font-size: 10.00px;">Git</a><a href="/tags/Hexo/" style="font-size: 15.00px;">Hexo</a><a href="/tags/Mac/" style="font-size: 10.00px;">Mac</a><a href="/tags/Markdown/" style="font-size: 10.00px;">Markdown</a><a href="/tags/Vim/" style="font-size: 10.00px;">Vim</a><a href="/tags/Xcode/" style="font-size: 15.00px;">Xcode</a><a href="/tags/app-碎片整理/" style="font-size: 10.00px;">app, 碎片整理</a><a href="/tags/iOS/" style="font-size: 20.00px;">iOS</a><a href="/tags/开源/" style="font-size: 10.00px;">开源</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+      <li><a href="http://www.njiang.cn/" target="_blank" title="Mentor楠哥的网站">Mentor楠哥的网站</a></li>
+    </ul>
+    <ul> <b> 值得关注的网站 </b>
+      <li><a href="http://blog.fens.me/series/" target="_blank" title="粉丝日志">粉丝日志</a></li>
+    </ul>
+    <ul> <b> 其他 </b>
+      <li><a href="http://wuchong.me" target="_blank" title="WuChong">Jark's Blog</a></li>
+      <li><a href="http://hexo.io" target="_blank" title="Hexo">Hexo</a></li>
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello, I&#39;m Vin. <br/>
+			Life is so beautiful. Never too late to learn.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Pacman">Jacman</a> © 2015 
+		
+		<a href="http://vin-zhou.github.com/about" target="_blank" title="Vin Zhou">Vin Zhou</a>
+		
+		</p>
+		<p class="copyright">
+		<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1253589886'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1253589886%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));</script>
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"vin-zhou"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+
+
+
+<div id="totop">
+<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+</div>
+
+<script src="/js/totop.js"></script>
+
+
+
+
+  </body>
+</html>

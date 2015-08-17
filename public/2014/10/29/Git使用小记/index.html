@@ -1,0 +1,544 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Git使用小记 | 没有什么能够阻挡</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Vin Zhou">
+    
+    <meta name="description" content="设置user.name和user.email
+12$ git config --global user.name &quot;Your Name&quot;$ git config --global user.email &quot;email@example.com&quot;
+
+查看设置结果
+12$ git config --glob">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="没有什么能够阻挡" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="没有什么能够阻挡" title="没有什么能够阻挡"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="没有什么能够阻挡">没有什么能够阻挡</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:vin-zhou.github.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/10/29/Git使用小记/" title="Git使用小记" itemprop="url">Git使用小记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://vin-zhou.github.com/about" title="Vin Zhou" target="_blank" itemprop="author">Vin Zhou</a>
+		
+  <p class="article-time">
+    <time datetime="2014-10-29T08:15:44.000Z" itemprop="datePublished"> 发表于 10月 29 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#设置user-name和user-email"><span class="toc-number">1.</span> <span class="toc-text">设置user.name和user.email</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#查看设置结果"><span class="toc-number">1.1.</span> <span class="toc-text">查看设置结果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#显示当前路径"><span class="toc-number">1.2.</span> <span class="toc-text">显示当前路径</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#提交修改"><span class="toc-number">2.</span> <span class="toc-text">提交修改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查看各版本提交记录"><span class="toc-number">3.</span> <span class="toc-text">查看各版本提交记录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#版本恢复"><span class="toc-number">4.</span> <span class="toc-text">版本恢复</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#工作区和暂存区"><span class="toc-number">5.</span> <span class="toc-text">工作区和暂存区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#撤销文件的修改"><span class="toc-number">6.</span> <span class="toc-text">撤销文件的修改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#撤销文件的add操作"><span class="toc-number">7.</span> <span class="toc-text">撤销文件的add操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除文件"><span class="toc-number">8.</span> <span class="toc-text">删除文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建分支"><span class="toc-number">9.</span> <span class="toc-text">创建分支</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#查看当前各分支及状态"><span class="toc-number">9.1.</span> <span class="toc-text">查看当前各分支及状态</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#合并分支"><span class="toc-number">10.</span> <span class="toc-text">合并分支</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除分支"><span class="toc-number">11.</span> <span class="toc-text">删除分支</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对比不同分支的同一文件"><span class="toc-number">12.</span> <span class="toc-text">对比不同分支的同一文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分支的管理策略"><span class="toc-number">13.</span> <span class="toc-text">分支的管理策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多人协作"><span class="toc-number">14.</span> <span class="toc-text">多人协作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">15.</span> <span class="toc-text">参考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#补充："><span class="toc-number">16.</span> <span class="toc-text">补充：</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="设置user-name和user-email">设置user.name和user.email</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ git config --global <span class="literal">user</span>.name <span class="string">"Your Name"</span></div><div class="line">$ git config --global <span class="literal">user</span>.email <span class="string">"email@example.com"</span></div></pre></td></tr></table></figure>
+
+<h3 id="查看设置结果">查看设置结果</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ git config --global <span class="literal">user</span>.name </div><div class="line">$ git config --global <span class="literal">user</span>.email</div></pre></td></tr></table></figure>
+
+<h3 id="显示当前路径">显示当前路径</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">pwd</span></div></pre></td></tr></table></figure>
+
+<h2 id="提交修改">提交修改</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$ </span>git add .</div><div class="line"><span class="variable">$ </span>git add -u</div><div class="line"><span class="variable">$ </span>git commit -m <span class="string">" XX comments "</span></div></pre></td></tr></table></figure>
+
+<h2 id="查看各版本提交记录">查看各版本提交记录</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ git <span class="built_in">log</span>   <span class="comment">// 查看详细版本日志</span></div><div class="line">$ git <span class="built_in">log</span> --pretty=oneline  <span class="comment">// 查看简略版本日志</span></div></pre></td></tr></table></figure>
+
+<p>  <strong>查看操作记录(包含版本commit提交记录）</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$ </span>git reflog</div></pre></td></tr></table></figure>
+
+<h2 id="版本恢复">版本恢复</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ git <span class="operator"><span class="keyword">reset</span> <span class="comment">--hard // 查看当前的版本号</span></span></div><div class="line">$ git <span class="keyword">reset</span> <span class="comment">--hard XX // 恢复至版本 XX</span></div></pre></td></tr></table></figure>
+
+<h2 id="工作区和暂存区">工作区和暂存区</h2>
+<ul>
+<li>工作区（Working Directory）：设定的git_work目录, 存放了各物理文件；</li>
+<li>版本库（Repository）：.git 隐藏目录。 版本库中包含了暂存区（stage或index），一个自动创建的分支master，以及一个指向master的指针head。</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ git <span class="built_in">add</span> <span class="comment"> // 是将文件修改添加到暂存区中；</span></div><div class="line">$ git commit <span class="comment"> // 是将暂存区中内容提交到当前分支中。</span></div><div class="line">$ git diff HEAD <span class="comment">-- XX_file_name  // 可以查看工作区和版本库中文件最新版本（HEAD来表示）的区别</span></div></pre></td></tr></table></figure>
+
+<h2 id="撤销文件的修改">撤销文件的修改</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">$</span> <span class="comment">git</span> <span class="comment">checkout</span> <span class="literal">-</span><span class="literal">-</span> <span class="comment">XX_file_name</span>  <span class="comment">//</span> <span class="comment">注意</span> <span class="literal">-</span><span class="literal">-</span> <span class="comment">不能丢，否则为新建一个分支的命令</span></div></pre></td></tr></table></figure>
+
+<p>此时文件xx_file_name在工作区中所做的修改将会被撤销，文件内容根据以下2中情况进行回退：</p>
+<pre><code><span class="bullet">1. </span>如果当前暂存区中有该文件，则回退到暂存区的版本；
+<span class="bullet">2. </span>如果没有，则回退到版本库中的最新版本。
+</code></pre><h2 id="撤销文件的add操作">撤销文件的add操作</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ git <span class="operator"><span class="keyword">reset</span> HEAD XX_file_name  // 将文件XX_file_name在暂存区的最新版本重新放回工作区，撤销 <span class="keyword">add</span></span></div></pre></td></tr></table></figure>
+
+<ul>
+<li>场景1：当你改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令git checkout — file。</li>
+<li>场景2：当你不但改乱了工作区某个文件的内容，还添加到了暂存区时，想丢弃修改，分两步，第一步用命令git reset HEAD file，就回到了场景1，第二步按场景1操作。</li>
+<li>场景3：已经提交了不合适的修改到版本库时，想要撤销本次提交，参考版本回退一节，不过前提是没有推送到远程库。</li>
+</ul>
+<h2 id="删除文件">删除文件</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="char">$ </span>rm <span class="class">XX_file_name</span></div><div class="line"><span class="char">$ </span>git rm <span class="class">XX_file_name</span>  // 版本库中删除</div><div class="line"><span class="char">$ </span>git checkout -- <span class="class">XX_file_name</span> // 版本库中恢复</div></pre></td></tr></table></figure>
+
+<h2 id="创建分支">创建分支</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ git branch XX_branch_name <span class="comment">// 创建分支</span></div><div class="line">$ git checkout XX_branch_name <span class="comment">// 切换到分支 XX_branch_name</span></div><div class="line">或者</div><div class="line">$ git checkout -b  XX_branch_name <span class="comment">// 创建并切换分支</span></div></pre></td></tr></table></figure>
+
+<h3 id="查看当前各分支及状态">查看当前各分支及状态</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$ </span>git branch</div><div class="line"><span class="variable">$ </span>git checkout <span class="constant">XX_branch_name</span> /<span class="regexp">/ 切换到分支 XX_branch_name</span></div></pre></td></tr></table></figure>
+
+<h2 id="合并分支">合并分支</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ git <span class="built_in">merge</span> XX_branch_name<span class="comment"> // 合并分支 XX_branch_name 到当前分支</span></div></pre></td></tr></table></figure>
+
+<h2 id="删除分支">删除分支</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ git branch <span class="operator">-d</span> XX_branch_name // 删除分支</div></pre></td></tr></table></figure>
+
+<h2 id="对比不同分支的同一文件">对比不同分支的同一文件</h2>
+<p>如对比文件 config/environment.m 在branch1\branch2中：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git difftool branch1:config/<span class="built_in">environment</span>.m branch2:config/<span class="built_in">environment</span>.m</div></pre></td></tr></table></figure>
+
+<h2 id="分支的管理策略">分支的管理策略</h2>
+<p>在实际开发中，我们应该按照几个基本原则进行分支管理：</p>
+<ol>
+<li>有一个master分支保持非常稳定，也就是仅用来发布新版本，平时不能在上面干活；</li>
+<li>有一个主dev分支用于开发，是不稳定的，修改都在dev上。只是到某个时候，比如1.0版本发布时，再把dev分支合并到master上，在master分支发布1.0版本；</li>
+<li>你和你的小伙伴们每个人都有自己的dev分支，时不时地往主dev分支上合并就可以了。</li>
+</ol>
+<p>如下图所示：</p>
+<p>   <strong>修改Bug和添加Feature时，都应当新建一个对应的Dev分支，待改动结束后，merge到主dev分支上。</strong></p>
+<h2 id="多人协作">多人协作</h2>
+<p>查看远程库信息：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ git remote -v <span class="comment">// 查看</span></div><div class="line">$ git remote <span class="keyword">add</span> origin_blog git@github.com:vin-zhou/vin-zhou.github.com.git <span class="comment">// 添加远程分支</span></div><div class="line">$ git remote <span class="keyword">remove</span> origin_blog <span class="comment">// 删除远程分支</span></div></pre></td></tr></table></figure>
+
+
+
+<p> 多人协作的工作模式通常是这样：</p>
+<p>   （1）首先，可以试图用git push origin branch-name推送自己的修改；<br>   （2）如果推送失败，则因为远程分支比你的本地更新，需要先用git pull试图合并；<br>   （3）如果合并有冲突，则解决冲突，并在本地提交；<br>   （4）没有冲突或者解决掉冲突后，再用git push origin branch-name推送就能成功！</p>
+<p>   如果git pull提示“no tracking information”，则说明本地分支和远程分支的链接关系没有创建，用命令git branch —set-upstream branch-name origin/branch-name。</p>
+<p>这就是多人协作的工作模式，一旦熟悉了，就非常简单。</p>
+<h2 id="参考">参考</h2>
+<ul>
+<li>笔记参考自<a href="http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000" target="_blank" rel="external">Git教程</a>，在此对原作者表示感谢！</li>
+<li><a href="http://www.yangzhiping.com/tech/github.html" target="_blank" rel="external">如何高效利用Github</a></li>
+<li><p><a href="http://yangjian.me/learning/learning-git/" target="_blank" rel="external">学习Git</a></p>
+<h2 id="补充：">补充：</h2>
+<ol>
+<li>强制添加文件 ：git add -f   ， 将会无视.gitignore文件，将目录下所有文件都添加进来。</li>
+<li>git 忽略文件  讲忽略文件的<a href="http://cwind.iteye.com/blog/1666646" target="_blank" rel="external">好文章</a></li>
+<li>使用  git rm —cached file_name  ，  会将该file_name从tracked中删除，不予跟踪。</li>
+<li>讲版本控制的<a href="http://sjtuecho.blog.163.com/blog/static/2050120742013011944140" target="_blank" rel="external">好文章</a></li>
+</ol>
+</li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Git/">Git</a>
+  </div>
+
+</div>
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://vin-zhou.github.com/2014/10/29/Git使用小记/" data-title="Git使用小记 | 没有什么能够阻挡" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/10/29/Mac-端口占用/" title="Mac 端口占用">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Mac 端口占用</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/10/29/在多台mac上处理Hexo博客/"  title="在多台mac上处理Hexo博客">
+ <strong>下一篇：</strong><br/> 
+ <span>在多台mac上处理Hexo博客
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+<div class="ds-thread"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"vin-zhou"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#设置user-name和user-email"><span class="toc-number">1.</span> <span class="toc-text">设置user.name和user.email</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#查看设置结果"><span class="toc-number">1.1.</span> <span class="toc-text">查看设置结果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#显示当前路径"><span class="toc-number">1.2.</span> <span class="toc-text">显示当前路径</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#提交修改"><span class="toc-number">2.</span> <span class="toc-text">提交修改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查看各版本提交记录"><span class="toc-number">3.</span> <span class="toc-text">查看各版本提交记录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#版本恢复"><span class="toc-number">4.</span> <span class="toc-text">版本恢复</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#工作区和暂存区"><span class="toc-number">5.</span> <span class="toc-text">工作区和暂存区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#撤销文件的修改"><span class="toc-number">6.</span> <span class="toc-text">撤销文件的修改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#撤销文件的add操作"><span class="toc-number">7.</span> <span class="toc-text">撤销文件的add操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除文件"><span class="toc-number">8.</span> <span class="toc-text">删除文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建分支"><span class="toc-number">9.</span> <span class="toc-text">创建分支</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#查看当前各分支及状态"><span class="toc-number">9.1.</span> <span class="toc-text">查看当前各分支及状态</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#合并分支"><span class="toc-number">10.</span> <span class="toc-text">合并分支</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除分支"><span class="toc-number">11.</span> <span class="toc-text">删除分支</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对比不同分支的同一文件"><span class="toc-number">12.</span> <span class="toc-text">对比不同分支的同一文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分支的管理策略"><span class="toc-number">13.</span> <span class="toc-text">分支的管理策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多人协作"><span class="toc-number">14.</span> <span class="toc-text">多人协作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">15.</span> <span class="toc-text">参考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#补充："><span class="toc-number">16.</span> <span class="toc-text">补充：</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/想法/" title="想法">想法<sup>1</sup></a></li>
+		
+			<li><a href="/categories/技术/" title="技术">技术<sup>26</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/iOS/" title="iOS">iOS<sup>22</sup></a></li>
+		
+			<li><a href="/tags/Xcode/" title="Xcode">Xcode<sup>3</sup></a></li>
+		
+			<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>3</sup></a></li>
+		
+			<li><a href="/tags/Git/" title="Git">Git<sup>1</sup></a></li>
+		
+			<li><a href="/tags/开源/" title="开源">开源<sup>1</sup></a></li>
+		
+			<li><a href="/tags/app-碎片整理/" title="app, 碎片整理">app, 碎片整理<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">8</span></li></ul>
+  </div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Git/" style="font-size: 10.00px;">Git</a><a href="/tags/Hexo/" style="font-size: 15.00px;">Hexo</a><a href="/tags/Mac/" style="font-size: 10.00px;">Mac</a><a href="/tags/Markdown/" style="font-size: 10.00px;">Markdown</a><a href="/tags/Vim/" style="font-size: 10.00px;">Vim</a><a href="/tags/Xcode/" style="font-size: 15.00px;">Xcode</a><a href="/tags/app-碎片整理/" style="font-size: 10.00px;">app, 碎片整理</a><a href="/tags/iOS/" style="font-size: 20.00px;">iOS</a><a href="/tags/开源/" style="font-size: 10.00px;">开源</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+      <li><a href="http://www.njiang.cn/" target="_blank" title="Mentor楠哥的网站">Mentor楠哥的网站</a></li>
+    </ul>
+    <ul> <b> 值得关注的网站 </b>
+      <li><a href="http://blog.fens.me/series/" target="_blank" title="粉丝日志">粉丝日志</a></li>
+    </ul>
+    <ul> <b> 其他 </b>
+      <li><a href="http://wuchong.me" target="_blank" title="WuChong">Jark's Blog</a></li>
+      <li><a href="http://hexo.io" target="_blank" title="Hexo">Hexo</a></li>
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello, I&#39;m Vin. <br/>
+			Life is so beautiful. Never too late to learn.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Pacman">Jacman</a> © 2015 
+		
+		<a href="http://vin-zhou.github.com/about" target="_blank" title="Vin Zhou">Vin Zhou</a>
+		
+		</p>
+		<p class="copyright">
+		<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1253589886'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1253589886%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));</script>
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"vin-zhou"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+
+
+
+<div id="totop">
+<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+</div>
+
+<script src="/js/totop.js"></script>
+
+
+
+
+  </body>
+</html>

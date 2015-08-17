@@ -1,0 +1,565 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>探究Objective-C 之属性 | 没有什么能够阻挡</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Vin Zhou">
+    
+    <meta name="description" content="在Objective-C 2.0，Apple提出了@property，一种成员变量属性标记语法，可以减少大量无谓的setter/getter代码。
+@property @synthesize
+如可以对AllWeatherRadial的变量rainingHandling添加@property标记,在.">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="没有什么能够阻挡" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="没有什么能够阻挡" title="没有什么能够阻挡"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="没有什么能够阻挡">没有什么能够阻挡</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:vin-zhou.github.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/11/09/探究Objective-C-之属性/" title="探究Objective-C 之属性" itemprop="url">探究Objective-C 之属性</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://vin-zhou.github.com/about" title="Vin Zhou" target="_blank" itemprop="author">Vin Zhou</a>
+		
+  <p class="article-time">
+    <time datetime="2014-11-09T14:26:46.000Z" itemprop="datePublished"> 发表于 11月 9 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#@property_@synthesize"><span class="toc-number">1.</span> <span class="toc-text">@property @synthesize</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在-m中给readonly的变量赋值"><span class="toc-number">2.</span> <span class="toc-text">在.m中给readonly的变量赋值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用@dynamic声明自定义setter/getter"><span class="toc-number">3.</span> <span class="toc-text">使用@dynamic声明自定义setter/getter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修改默认的accessor方法名"><span class="toc-number">4.</span> <span class="toc-text">修改默认的accessor方法名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#@property语法"><span class="toc-number">5.</span> <span class="toc-text">@property语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#strong_/_weak_property"><span class="toc-number">6.</span> <span class="toc-text">strong / weak property</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他"><span class="toc-number">7.</span> <span class="toc-text">其他</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">8.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<p>在Objective-C 2.0，Apple提出了@property，一种成员变量属性标记语法，可以减少大量无谓的setter/getter代码。</p>
+<h2 id="@property_@synthesize">@property @synthesize</h2>
+<p>如可以对AllWeatherRadial的变量rainingHandling添加@property标记,<br>在.h文件中：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@inerface AllWeatherRadial:Tire</div><div class="line">{</div><div class="line">	<span class="keyword">float</span> rainHandling;</div><div class="line">}</div><div class="line"><span class="keyword">@property</span> <span class="keyword">float</span> rainHandling;</div><div class="line"><span class="keyword">@end</span> <span class="comment">// AllWeatherRadial.h</span></div></pre></td></tr></table></figure>
+
+<p>等效于在头文件中声明2个方法：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>) setRainHandling:(<span class="keyword">float</span>)newRainHandling;</div><div class="line">- (<span class="keyword">float</span>)rainHandling;</div></pre></td></tr></table></figure>
+
+<p>在.m文件中：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor">#import <span class="title">"AllWeatherRadial.h"</span></span></div><div class="line"><span class="keyword">@synthesize</span> rainHandling;</div></pre></td></tr></table></figure>
+
+<p>等效于在实现文件中实现2个方法:</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">-（<span class="keyword">void</span>）setRainHandling:(<span class="keyword">float</span>)newRainHandling</div><div class="line">{</div><div class="line"> rainHandling = newRainHandling;</div><div class="line">}</div><div class="line">- (<span class="keyword">float</span>) rainHandling</div><div class="line">{</div><div class="line"> <span class="keyword">return</span> rainHandling;</div><div class="line">} <span class="comment">// AllWeatherRadial.m</span></div></pre></td></tr></table></figure>
+
+<p>标记<code>@property float rainHandling；</code>告诉编译器，可以通过-setRainHandling方法设置rainHandling变量，通过-rainHandling方法获得其变量值（相当于声明）。<code>@synthesize rainHandling</code>也是一个编译特性，让编译器添加-setRainHandling: 和-rainHandling的编译代码；而如果.m文件中已有了自定义的这两个方法，编译器就不会再次添加了（相当于实现）。</p>
+<p>可以看到上例中包含@property的.h文件中，也声明了实例变量<code>{float rainHandling;}</code>,使用 @synthesize 设置的变量将会与之自动关联，并生成其setter/getter方法。可以在.h或.m文件中添加这些实例变量，区别在于：</p>
+<ul>
+<li>如果在.h文件中添加，则其子类可以直接访问.h中的这些变量；（提供了公共访问接口）</li>
+<li>如果在.m文件中添加，则只能本类访问。</li>
+</ul>
+<p>如果.h或.m中没有声明这些变量，编译器会创建他们。因此可以把<code>{float rainHandling;}</code>从.h或.m文件中移除，只保留@property , @synthesize。</p>
+<p>在Xcode4.5及以后的版本中，可以省略@synthesize这句，编译器会自动帮你加setter/getter方法，并且会默认访问_rainHandling这个成员变量，如果找不到，则会自动生成一个该名字的私有成员变量。但@synthesize可以定义与变量名不相同的set/get的命令,如<code>@synthesize rainHandling = anotherName</code>，在.m中以anotherName(而不是self.rainHandling)进行访问、赋值操作，通常anotherName为：</p>
+<ul>
+<li>interface{}中声明的一个变量，使得property 与该变量一致；</li>
+<li>在.m中声明的另一个变量，用来改写读写等属性权限；</li>
+</ul>
+<p>调用 self.rainHandling = 1.0f;实质上调用的是rainHandling的setter函数，即<code>[self setRainHandling:1.0f];</code>。</p>
+<h2 id="在-m中给readonly的变量赋值">在.m中给readonly的变量赋值</h2>
+<p> 例如：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">AllWeatherRadial</span>:<span class="title">Tire</span></span></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">readonly</span>) <span class="built_in">NSString</span> *title;  </div><div class="line"><span class="keyword">@end</span> <span class="comment">// AllWeatherRadial.h</span></div></pre></td></tr></table></figure>
+
+<p> 编译器在看到readonly标记时，将会只声明getter函数而没有setter函数，因此在.m中无法直接给readonly的变量赋值。但可以通过以下2种方式实现：</p>
+<ul>
+<li>方法1<br> 在.m中用@synthesize 声明一个同名的变量。</li>
+<li>方法2<br>在.m中先声明一个变量如(mTitle)，再用@synthesize title = mTitle;绑定，由mTitle赋值。</li>
+</ul>
+<h2 id="使用@dynamic声明自定义setter/getter">使用@dynamic声明自定义setter/getter</h2>
+<p>如果想在运行时得到某个变量的值，而不需要编译器默认设置，可以使用@dynamic进行声明：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">@property</span> (<span class="keyword">readonly</span>) <span class="keyword">float</span> bodyMassIndex;</div><div class="line"></div><div class="line"><span class="keyword">@dynamic</span> bodyMassIndex;</div><div class="line">- (<span class="keyword">float</span>)bodyMassIndex</div><div class="line">{</div><div class="line"> <span class="comment">// compute and return bodyMassIndex</span></div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>如果使用了@dynamic声明，但没有提供accessor方法，将报错。</p>
+<h2 id="修改默认的accessor方法名">修改默认的accessor方法名</h2>
+<p>可以使用getter= 和 setter=来自定义方法名，如：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">@property</span> (getter = isHidden) <span class="built_in">BOOL</span> hidden;</div></pre></td></tr></table></figure>
+
+<p>声明-(BOOL)isHidden；方法来取代默认的-(BOOL)hidden;</p>
+<h2 id="@property语法">@property语法</h2>
+<p>其语法为：<code>@property(参数1， 参数2)类型 名字；</code><br>如：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">@property</span>(<span class="keyword">nonatomic</span>, retain) <span class="built_in">UIWindow</span>* window;</div></pre></td></tr></table></figure>
+
+<p>其中参数分为4类：</p>
+<ul>
+<li>读写属性：readwrite (默认)/ readonly </li>
+<li>setter语意： assign（默认/ retain / copy</li>
+<li>原子性： atomicity(默认) / nonatomic</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>意义 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>readwrite</td>
+<td>产生setter/getter方法 </td>
+</tr>
+<tr>
+<td>readonly</td>
+<td>只产生getter，没有setter</td>
+</tr>
+<tr>
+<td>assign</td>
+<td>setter方法直接赋值，而不进行retain操作</td>
+</tr>
+<tr>
+<td>retain</td>
+<td>setter方法对参数newValue执行  if（value != newValue){ [value release]; value = [newValue retain]}; 操作</td>
+</tr>
+<tr>
+<td>copy</td>
+<td>setter方法对参数newValue执行  if（value != newValue) { [value release];value = [newValue copy]; } 操作</td>
+</tr>
+<tr>
+<td>nonatomic</td>
+<td>禁止多线程，变量保护，提高性能</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>使用assign: 对于基础数据类型（NSInteger)和C数据类型（int, float, double，char等）</li>
+<li>使用copy: 对NSString</li>
+<li>使用retain: 对其他NSObject和其子类</li>
+</ul>
+<h2 id="strong_/_weak_property">strong / weak property</h2>
+<p> strong和weak 属性只有在打开ARC时才会被要求使用，此时不能使用retain, release, autorelease；因此ARC会自动来做这些操作。但你需要在对象属性上使用strong和weak,其中</p>
+<ul>
+<li>strong相当于retain(需要负责生命周期)，用了后， 引用计数自动+1，且不需要考虑是retain还是copy;</li>
+<li>weak相当于assign（不需要），但它多了一点，会在内存释放后自动将变量设为nil。</li>
+</ul>
+<p>默认情况下是strong。只有在避免retain cycle（循环引用）时，需要使用weak。</p>
+<p>归属权问题：类内部的多用strong，外部的多用weak。</p>
+<h2 id="其他">其他</h2>
+<p>@property 只能用来简化设定accessor方法，对于多参数的如：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)setTire:(Tire*)tire atIndex:(<span class="keyword">int</span>)index;</div><div class="line">- (Tire*)tireAtIndex:(<span class="keyword">int</span>)index;</div></pre></td></tr></table></figure>
+
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="http://justcoding.iteye.com/blog/1444548" target="_blank" rel="external">Obejctive-C中的@property和@synthesize用法</a></li>
+<li><a href="http://blog.csdn.net/duxinfeng2010/article/details/8461784" target="_blank" rel="external">copy, retain等的使用</a></li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/技术/">技术</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a>
+  </div>
+
+</div>
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://vin-zhou.github.com/2014/11/09/探究Objective-C-之属性/" data-title="探究Objective-C 之属性 | 没有什么能够阻挡" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/11/14/探究Objective-C-之分类（Categories）/" title="探究Objective-C 之分类（Categories）">
+  <strong>上一篇：</strong><br/>
+  <span>
+  探究Objective-C 之分类（Categories）</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/11/07/开源资料/"  title="开源资料">
+ <strong>下一篇：</strong><br/> 
+ <span>开源资料
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+<div class="ds-thread"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"vin-zhou"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#@property_@synthesize"><span class="toc-number">1.</span> <span class="toc-text">@property @synthesize</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在-m中给readonly的变量赋值"><span class="toc-number">2.</span> <span class="toc-text">在.m中给readonly的变量赋值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用@dynamic声明自定义setter/getter"><span class="toc-number">3.</span> <span class="toc-text">使用@dynamic声明自定义setter/getter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修改默认的accessor方法名"><span class="toc-number">4.</span> <span class="toc-text">修改默认的accessor方法名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#@property语法"><span class="toc-number">5.</span> <span class="toc-text">@property语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#strong_/_weak_property"><span class="toc-number">6.</span> <span class="toc-text">strong / weak property</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他"><span class="toc-number">7.</span> <span class="toc-text">其他</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">8.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/想法/" title="想法">想法<sup>1</sup></a></li>
+		
+			<li><a href="/categories/技术/" title="技术">技术<sup>26</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/iOS/" title="iOS">iOS<sup>22</sup></a></li>
+		
+			<li><a href="/tags/Xcode/" title="Xcode">Xcode<sup>3</sup></a></li>
+		
+			<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>3</sup></a></li>
+		
+			<li><a href="/tags/Git/" title="Git">Git<sup>1</sup></a></li>
+		
+			<li><a href="/tags/开源/" title="开源">开源<sup>1</sup></a></li>
+		
+			<li><a href="/tags/app-碎片整理/" title="app, 碎片整理">app, 碎片整理<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">8</span></li></ul>
+  </div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Git/" style="font-size: 10.00px;">Git</a><a href="/tags/Hexo/" style="font-size: 15.00px;">Hexo</a><a href="/tags/Mac/" style="font-size: 10.00px;">Mac</a><a href="/tags/Markdown/" style="font-size: 10.00px;">Markdown</a><a href="/tags/Vim/" style="font-size: 10.00px;">Vim</a><a href="/tags/Xcode/" style="font-size: 15.00px;">Xcode</a><a href="/tags/app-碎片整理/" style="font-size: 10.00px;">app, 碎片整理</a><a href="/tags/iOS/" style="font-size: 20.00px;">iOS</a><a href="/tags/开源/" style="font-size: 10.00px;">开源</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+      <li><a href="http://www.njiang.cn/" target="_blank" title="Mentor楠哥的网站">Mentor楠哥的网站</a></li>
+    </ul>
+    <ul> <b> 值得关注的网站 </b>
+      <li><a href="http://blog.fens.me/series/" target="_blank" title="粉丝日志">粉丝日志</a></li>
+    </ul>
+    <ul> <b> 其他 </b>
+      <li><a href="http://wuchong.me" target="_blank" title="WuChong">Jark's Blog</a></li>
+      <li><a href="http://hexo.io" target="_blank" title="Hexo">Hexo</a></li>
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello, I&#39;m Vin. <br/>
+			Life is so beautiful. Never too late to learn.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Pacman">Jacman</a> © 2015 
+		
+		<a href="http://vin-zhou.github.com/about" target="_blank" title="Vin Zhou">Vin Zhou</a>
+		
+		</p>
+		<p class="copyright">
+		<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1253589886'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1253589886%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));</script>
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"vin-zhou"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+
+
+
+<div id="totop">
+<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+</div>
+
+<script src="/js/totop.js"></script>
+
+
+
+
+  </body>
+</html>
