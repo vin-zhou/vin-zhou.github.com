@@ -2,6 +2,11 @@ title: iOS开发不错的网站
 date: 2014-11-06 17:14:21
 tags: iOS
 ---
+* 博客类：
+南峰子的技术博客： http://southpeak.github.io/blog/categories/ios/
+王中周的技术博客： http://foggry.com/ 
+http://blog.csdn.net/wzzvictory/article/details/8630828
+
 * Cocos2d游戏类： 
 泰然论坛： http://www.ityran.com/forum-61-1.html 
 

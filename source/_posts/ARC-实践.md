@@ -21,6 +21,7 @@ date: 2015-02-02 08:53:55
 3. No Casual Castring id <-> void*
  * 编译器必须知道void*是否被retained
  * 提供了如下所示的Objective-C和Core Foundation-style 对象转换的新API：
+ * Core Foundation 对象简称CF对象, 如 Core Graphics、Core Text， ARC环境下编译器不会自动管理CF对象的内存，所以当我们创建了一个CF对象后，需要CFRelease将其手动释放。因此CF和OC相互转化时，也需要使用特定转换符指定内存释放的责任。
  ```objc
  // old 
  CFStringRef w = (__bridge CFStringRef)A;
@@ -33,17 +34,21 @@ date: 2015-02-02 08:53:55
  CFStringRef Y = (_bridge_retain CFStringRef)obj;
  NSString *  z = (__bridge_transfer NSString*)ref;
  ```
-
+ 
+ 
   * `__bridge` 表示不改变ownership。如`id obj = (__bridge id)CFDictionaryGetValue(cfDict, key); `
   
 
-  * `__bridge_retained" 表示将Objective-C对象的ownership 转交给非Objetive-C对象，由我们自己维护生命周期。如`CFStringRef value = (__bridge_retained CFStringRef)[self someStrhing]; UseCFStringValue(value)；CFRelease(value);`
+  * `__bridge_retained` 作用同CFBridgingRetain, 表示将Ob-C对象的ownership 转交给CF对象，由我们自己维护生命周期。如
+  `CFStringRef value = (__bridge_retained CFStringRef)[self someStrhing]; UseCFStringValue(value)；CFRelease(value);`
 
-  * `__bridge_transfer`用于将非Objective-C 对象的ownership转交给Objective-C 对象，之后有系统自动负责管理生命周期。如`NSString *value = (__bridge_transfer NSString*)CFPreferencesCopyAppValue(CFSTR("SomeKey"), CFSTR("com.company.someapp"));`
+  * `__bridge_transfer` 作用同CFBridgingRelease，与__bridge_retained, 用于将CF对象的ownership转交给Ob-C 对象，之后由系统自动负责管理生命周期。如
+  `NSString *value = (__bridge_transfer NSString*)CFPreferencesCopyAppValue(CFSTR("SomeKey"), CFSTR("com.company.someapp"));`
+  使用之后，不必再重复调用CFRelease()，因为已经release一次了。
 
 4. No NSAutoreleasePool
  * 编译器必须知道autoreleaed所控制的指针
- * NSAutoreleasePoll 不是一个真正的对象，因此无法被retianed
+ * NSAutoreleasePool 不是一个真正的对象，因此无法被retianed
  * 解决方法： 使用@autoreleasepool{  }.
 
 ## How do I think about ARC
