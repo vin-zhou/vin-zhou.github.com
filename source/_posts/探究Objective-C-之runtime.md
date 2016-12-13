@@ -143,6 +143,7 @@ void method_exchangeImplementations ( Method m1, Method m2 );
 由NSObject根类提供的类方法，调用时机为 当被调用的方法实现部分没有找到，而消息转发机制启动之前的这个中间时刻：
 ```objc
 +(BOOL) resolveInstanceMethod:(SEL) sel
++(BOOL) resolveClasMethod:(SEL) sel
 ---------------------
 
 // 举例：
@@ -177,3 +178,6 @@ void dynamicMethodIMP(id self, SEL _cmd)
 	}                                                                          
 }
 ```
+
+##参考
+* [Objective-C中的@dynamic](http://www.csdn123.com/html/blogs/20131019/85539.htm)
