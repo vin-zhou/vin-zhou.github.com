@@ -1,0 +1,564 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>矢量图标管理 | 没有什么能够阻挡</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Vin Zhou">
+    
+
+    
+    <meta name="description" content="背景基于图片的图标管理项目中原有的图标是以.png图片的形式提供，比如一个箭头图标，就需要提供 arrow.png （20px20px）, arrow@2x.png （40px40px）, arrow@3x.png (60px*60px) 三张不同分辨率图片，存放在Resource/下的bundle里。既占用空间，又不便于维护和管理。 矢量图标管理优点：  减小app的大小，现有的图标资源文件占整">
+<meta name="keywords" content="iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="矢量图标管理">
+<meta property="og:url" content="http://vin-zhou.github.com/2016/10/29/矢量图标管理/index.html">
+<meta property="og:site_name" content="没有什么能够阻挡">
+<meta property="og:description" content="背景基于图片的图标管理项目中原有的图标是以.png图片的形式提供，比如一个箭头图标，就需要提供 arrow.png （20px20px）, arrow@2x.png （40px40px）, arrow@3x.png (60px*60px) 三张不同分辨率图片，存放在Resource/下的bundle里。既占用空间，又不便于维护和管理。 矢量图标管理优点：  减小app的大小，现有的图标资源文件占整">
+<meta property="og:updated_time" content="2017-05-17T08:18:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="矢量图标管理">
+<meta name="twitter:description" content="背景基于图片的图标管理项目中原有的图标是以.png图片的形式提供，比如一个箭头图标，就需要提供 arrow.png （20px20px）, arrow@2x.png （40px40px）, arrow@3x.png (60px*60px) 三张不同分辨率图片，存放在Resource/下的bundle里。既占用空间，又不便于维护和管理。 矢量图标管理优点：  减小app的大小，现有的图标资源文件占整">
+
+    
+    <link rel="alternative" href="/atom.xml" title="没有什么能够阻挡" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="没有什么能够阻挡" title="没有什么能够阻挡"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="没有什么能够阻挡">没有什么能够阻挡</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:vin-zhou.github.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/10/29/矢量图标管理/" title="矢量图标管理" itemprop="url">矢量图标管理</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Vin Zhou" target="_blank" itemprop="author">Vin Zhou</a>
+		
+  <p class="article-time">
+    <time datetime="2016-10-29T10:53:55.000Z" itemprop="datePublished"> 发表于 Oct 29 2016</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#基于图片的图标管理"><span class="toc-number">1.0.1.</span> <span class="toc-text">基于图片的图标管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#矢量图标管理"><span class="toc-number">1.0.2.</span> <span class="toc-text">矢量图标管理</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现"><span class="toc-number">2.</span> <span class="toc-text">实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#矢量图标生成和设置"><span class="toc-number">2.0.1.</span> <span class="toc-text">矢量图标生成和设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#矢量图标的使用"><span class="toc-number">2.0.2.</span> <span class="toc-text">矢量图标的使用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#向前兼容性"><span class="toc-number">2.0.3.</span> <span class="toc-text">向前兼容性</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他考虑"><span class="toc-number">3.</span> <span class="toc-text">其他考虑</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><h4 id="基于图片的图标管理"><a href="#基于图片的图标管理" class="headerlink" title="基于图片的图标管理"></a>基于图片的图标管理</h4><p>项目中原有的图标是以.png图片的形式提供，比如一个箭头图标，就需要提供 arrow.png （20px<em>20px）, arrow@2x.png （40px</em>40px）, arrow@3x.png (60px*60px) 三张不同分辨率图片，存放在Resource/下的bundle里。既占用空间，又不便于维护和管理。</p>
+<h4 id="矢量图标管理"><a href="#矢量图标管理" class="headerlink" title="矢量图标管理"></a>矢量图标管理</h4><p>优点：</p>
+<ul>
+<li>减小app的大小，现有的图标资源文件占整个app大小的大约18%（压缩前约54M, 压缩后约9MB），而对应的Vector Font的资源文件在 300KB~500KB，仅占原有大小的1/50。</li>
+<li>方便管理和部署。 只需维护一个.ttf文件而非维护非常多的图片文件；矢量图不失真，支持以后更高分辨率的要求。</li>
+<li>跨平台。 还可以提供给Android或者Web等使用。</li>
+</ul>
+<p>潜在的顾虑：</p>
+<ul>
+<li>性能下降。（需测试）</li>
+<li>需在工程各个地方替换，有一定的工作量</li>
+<li>之前的UX设计都是基于图标像素的，而不是字号（fontSize）。如果全部重新给出基于字号的UX设计，工作量太大。因此需考虑向前兼容性。</li>
+</ul>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h4 id="矢量图标生成和设置"><a href="#矢量图标生成和设置" class="headerlink" title="矢量图标生成和设置"></a>矢量图标生成和设置</h4><ol>
+<li>UX使用Sketch等工具生成图标的svg格式的矢量图，然后使用<a href="http://fontello.com/" target="_blank" rel="external">http://fontello.com/</a> 等工具生成.ttf格式的字体文件</li>
+<li>将文件放入Resource文件夹下，例如将IconFont.ttf文件放在/Resource/Icon/文件夹下</li>
+<li>在target的 BuildPhases-&gt;Copy Build Resources-&gt;中，添加/Resource/Icon/ 文件夹即可。</li>
+</ol>
+<h4 id="矢量图标的使用"><a href="#矢量图标的使用" class="headerlink" title="矢量图标的使用"></a>矢量图标的使用</h4><ol>
+<li>自定义的工具类MSIVectorIconHelper提供了一个方法，生成NSAttributedString</li>
+</ol>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Provide vector icon as text. It'll be set in UILabel  and used as an icon viewer. </span></div><div class="line">+ (<span class="keyword">nullable</span> <span class="built_in">NSAttributedString</span> *)generateIconText:(<span class="keyword">nonnull</span> <span class="built_in">NSString</span> *)iconName fontSize:(<span class="built_in">NSInteger</span>)size color:(<span class="keyword">nullable</span> <span class="built_in">UIColor</span> *)color</div><div class="line">&#123;</div><div class="line">    <span class="comment">//简化版</span></div><div class="line">    <span class="keyword">return</span> [[<span class="built_in">NSMutableAttributedString</span> alloc] initWithString:[MSIVectorIcon getUnicode:iconName] attributes:@&#123;[<span class="built_in">NSFontAttributeName</span>: <span class="string">@"IconFont"</span>, <span class="built_in">NSForegroundColorAttributeName</span>: color]&#125;]； <span class="comment">// IconFont即为IconFont.ttf文件名</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ol>
+<li>使用</li>
+</ol>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSAttributedString</span>* iconString = [MSIVectorIconHelper generateIconText:<span class="string">@"ra_filter_expand"</span></div><div class="line">                                                      fontSize: fontSize</div><div class="line">                                                         color: fontColor];</div><div class="line">iconView = [[<span class="built_in">UILabel</span> alloc] init];</div><div class="line">iconView.attributedText = iconString;</div><div class="line"><span class="built_in">CGSize</span> iconSize = iconView.intrinsicContentSize; </div><div class="line"><span class="comment">// 或者</span></div><div class="line"><span class="comment">// CGSize iconSize = [iconString boundingRectWithSize:CGSizeMake(INT32_MAX, INT32_MAX)</span></div><div class="line">                                                       options:<span class="built_in">NSStringDrawingUsesLineFragmentOrigin</span></div><div class="line">                                                       context:<span class="literal">nil</span>];</div><div class="line">iconView.frame = <span class="built_in">CGRectMake</span>(X, XX, iconSize.width, iconSize.height);</div><div class="line">XXX.addSubView(iconView);</div></pre></td></tr></table></figure>
+<h4 id="向前兼容性"><a href="#向前兼容性" class="headerlink" title="向前兼容性"></a>向前兼容性</h4><p>提供根据矢量图生成指定大小的UIImage供原有代码使用。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Forward compatible, provide UIImage based on vector icon.</span></div><div class="line">+ (<span class="keyword">nullable</span> <span class="built_in">UIImage</span> *)generateImage:(<span class="keyword">nonnull</span> <span class="built_in">NSString</span> *)iconName;</div><div class="line">+ (<span class="keyword">nullable</span> <span class="built_in">UIImage</span> *)generateImage:(<span class="keyword">nonnull</span> <span class="built_in">NSString</span> *)iconName imageSize:(<span class="built_in">CGSize</span>)size color:(<span class="keyword">nullable</span> <span class="built_in">UIColor</span> *)defaultColor;</div><div class="line">+ (<span class="keyword">nullable</span> <span class="built_in">UIImage</span> *)generateImage:(<span class="keyword">nonnull</span> <span class="built_in">NSString</span> *)iconName colorWithInt:(<span class="built_in">NSInteger</span>)colorInt alpha:(<span class="built_in">CGFloat</span>)alpha;</div></pre></td></tr></table></figure>
+<p>实现核心</p>
+<ol>
+<li>首先生成一个256*256大小的UILabel（vectorIcon），根据具体的iconName, 二分查找出尽可能布满Label的最小字号，用drawTextInRect:完成绘制</li>
+<li><p>然后使用 grabImage 生成其对应的Image:</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">+ (<span class="built_in">UIImage</span> *)grabImage:(<span class="built_in">UIView</span> *)view &#123;</div><div class="line">    <span class="comment">// create a "canvas" (image context) to draw in</span></div><div class="line">    <span class="built_in">UIGraphicsBeginImageContextWithOptions</span>([view bounds].size, <span class="literal">NO</span>, <span class="number">0.0</span>);</div><div class="line">    <span class="comment">// Make the CALayer to draw in our "canvas"</span></div><div class="line">    [[view layer] renderInContext:<span class="built_in">UIGraphicsGetCurrentContext</span>()];</div><div class="line">    <span class="comment">// Fetch an UIImage of our "canvas"</span></div><div class="line">    <span class="built_in">UIImage</span> *image = <span class="built_in">UIGraphicsGetImageFromCurrentImageContext</span>();</div><div class="line">    <span class="comment">// stop the "canvas" from accepting any input</span></div><div class="line">    <span class="built_in">UIGraphicsEndImageContext</span>();</div><div class="line">    <span class="keyword">return</span> image;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>最后使用imageScaledToSize放缩图像到指定的大小:</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">UIImage</span> *)imageScaledToSize:(<span class="built_in">CGSize</span>)newSize</div><div class="line">&#123;</div><div class="line">    <span class="comment">// In next line, pass 0.0 to use the current device's pixel scaling factor (and thus account for Retina resolution).</span></div><div class="line">    <span class="comment">// Pass 1.0 to force exact pixel size.</span></div><div class="line">    <span class="built_in">UIGraphicsBeginImageContextWithOptions</span>(newSize, <span class="literal">NO</span>, <span class="number">0.0</span>);</div><div class="line">    [<span class="keyword">self</span> drawInRect:<span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, newSize.width, newSize.height)];</div><div class="line">    <span class="built_in">UIImage</span> *newImage = <span class="built_in">UIGraphicsGetImageFromCurrentImageContext</span>();</div><div class="line">    <span class="built_in">UIGraphicsEndImageContext</span>();</div><div class="line">    <span class="keyword">return</span> newImage;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="其他考虑"><a href="#其他考虑" class="headerlink" title="其他考虑"></a>其他考虑</h2><p>由于生成UIImage需要一定的时间，因此在工具类MSIVectorIconHelper添加一个NSDictionary作为图片的缓存，可以记录最近的10个UIImage以提高性能。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/技术/">技术</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://vin-zhou.github.com/2016/10/29/矢量图标管理/" data-title="矢量图标管理 | 没有什么能够阻挡" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/11/18/FMDB使用札记/" title="FMDB使用札记">
+  <strong>上一篇：</strong><br/>
+  <span>
+  FMDB使用札记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/10/22/Swift编程札记/"  title="Swift编程札记">
+ <strong>下一篇：</strong><br/> 
+ <span>Swift编程札记
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/10/29/矢量图标管理/" data-title="矢量图标管理" data-url="http://vin-zhou.github.com/2016/10/29/矢量图标管理/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#基于图片的图标管理"><span class="toc-number">1.0.1.</span> <span class="toc-text">基于图片的图标管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#矢量图标管理"><span class="toc-number">1.0.2.</span> <span class="toc-text">矢量图标管理</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现"><span class="toc-number">2.</span> <span class="toc-text">实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#矢量图标生成和设置"><span class="toc-number">2.0.1.</span> <span class="toc-text">矢量图标生成和设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#矢量图标的使用"><span class="toc-number">2.0.2.</span> <span class="toc-text">矢量图标的使用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#向前兼容性"><span class="toc-number">2.0.3.</span> <span class="toc-text">向前兼容性</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他考虑"><span class="toc-number">3.</span> <span class="toc-text">其他考虑</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/想法/" title="想法">想法<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/技术/" title="技术">技术<sup>42</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>35</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Xcode/" title="Xcode">Xcode<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Swift/" title="Swift">Swift<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Git/" title="Git">Git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/app-碎片整理/" title="app, 碎片整理">app, 碎片整理<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开源/" title="开源">开源<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">8</span></li></ul>
+  </div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Mac/" style="font-size: 13.33px;">Mac</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Swift/" style="font-size: 13.33px;">Swift</a> <a href="/tags/Vim/" style="font-size: 10px;">Vim</a> <a href="/tags/Xcode/" style="font-size: 16.67px;">Xcode</a> <a href="/tags/app-碎片整理/" style="font-size: 10px;">app, 碎片整理</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/开源/" style="font-size: 10px;">开源</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Vin. <br/>
+			Life is so beautiful. Never too late to learn.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="Vin Zhou">Vin Zhou</a>
+		
+		
+		</p>
+		<p class="copyright">
+		<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1253589886'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1253589886%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));</script>
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"vin-zhou"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

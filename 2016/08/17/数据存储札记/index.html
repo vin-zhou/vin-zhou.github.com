@@ -1,0 +1,654 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>数据存储札记 | 没有什么能够阻挡</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Vin Zhou">
+    
+
+    
+    <meta name="description" content="前言本文对iOS中数据存储方式做一总结，涉及到应用程序沙盒（Sandbox）和5种常用的数据存储方式，最后介绍了主流的第三方框架FMDB。 应用沙盒 每个iOS应用都有自己的应用沙盒，应用沙盒就是文件系统目录，与其他文件系统隔离。应用必须待在自己的沙盒里，其他应用不能访问该沙盒。 应用沙盒的文件系统目录，如下图所示：（关于Simulator里的app沙盒文件路径位置，详见iOS开发中Simulat">
+<meta name="keywords" content="iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据存储札记">
+<meta property="og:url" content="http://vin-zhou.github.com/2016/08/17/数据存储札记/index.html">
+<meta property="og:site_name" content="没有什么能够阻挡">
+<meta property="og:description" content="前言本文对iOS中数据存储方式做一总结，涉及到应用程序沙盒（Sandbox）和5种常用的数据存储方式，最后介绍了主流的第三方框架FMDB。 应用沙盒 每个iOS应用都有自己的应用沙盒，应用沙盒就是文件系统目录，与其他文件系统隔离。应用必须待在自己的沙盒里，其他应用不能访问该沙盒。 应用沙盒的文件系统目录，如下图所示：（关于Simulator里的app沙盒文件路径位置，详见iOS开发中Simulat">
+<meta property="og:image" content="http://7qnakw.com1.z0.glb.clouddn.com/Sandbox.png">
+<meta property="og:updated_time" content="2017-05-17T09:50:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据存储札记">
+<meta name="twitter:description" content="前言本文对iOS中数据存储方式做一总结，涉及到应用程序沙盒（Sandbox）和5种常用的数据存储方式，最后介绍了主流的第三方框架FMDB。 应用沙盒 每个iOS应用都有自己的应用沙盒，应用沙盒就是文件系统目录，与其他文件系统隔离。应用必须待在自己的沙盒里，其他应用不能访问该沙盒。 应用沙盒的文件系统目录，如下图所示：（关于Simulator里的app沙盒文件路径位置，详见iOS开发中Simulat">
+<meta name="twitter:image" content="http://7qnakw.com1.z0.glb.clouddn.com/Sandbox.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="没有什么能够阻挡" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="没有什么能够阻挡" title="没有什么能够阻挡"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="没有什么能够阻挡">没有什么能够阻挡</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:vin-zhou.github.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/17/数据存储札记/" title="数据存储札记" itemprop="url">数据存储札记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Vin Zhou" target="_blank" itemprop="author">Vin Zhou</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-17T13:53:55.000Z" itemprop="datePublished"> 发表于 Aug 17 2016</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用沙盒"><span class="toc-number">2.</span> <span class="toc-text">应用沙盒</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#存储方式"><span class="toc-number">3.</span> <span class="toc-text">存储方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NSUserDefaults"><span class="toc-number">4.</span> <span class="toc-text">NSUserDefaults</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#plist属性列表-XML"><span class="toc-number">5.</span> <span class="toc-text">plist属性列表(XML)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NSKeyedArchiver归档-（NSCoding）"><span class="toc-number">6.</span> <span class="toc-text">NSKeyedArchiver归档 （NSCoding）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQLite3"><span class="toc-number">7.</span> <span class="toc-text">SQLite3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Core-Data-不提倡使用"><span class="toc-number">8.</span> <span class="toc-text">Core Data (不提倡使用)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第三方框架"><span class="toc-number">9.</span> <span class="toc-text">第三方框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">10.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文对iOS中数据存储方式做一总结，涉及到应用程序沙盒（Sandbox）和5种常用的数据存储方式，最后介绍了主流的第三方框架FMDB。</p>
+<h2 id="应用沙盒"><a href="#应用沙盒" class="headerlink" title="应用沙盒"></a>应用沙盒</h2><ol>
+<li>每个iOS应用都有自己的应用沙盒，应用沙盒就是文件系统目录，与其他文件系统隔离。应用必须待在自己的沙盒里，其他应用不能访问该沙盒。</li>
+<li>应用沙盒的文件系统目录，如下图所示：<br><img src="http://7qnakw.com1.z0.glb.clouddn.com/Sandbox.png" alt="Sandbox文件目录"><br>（关于Simulator里的app沙盒文件路径位置，详见<a href="http://www.jianshu.com/p/3cf2fe65b007" target="_blank" rel="external">iOS开发中Simulator相关路径汇总</a>）  </li>
+<li><p>应用沙盒结构分析</p>
+<ol>
+<li>Documents: iTunes同步设备时回备份该目录。 用于保存app运行时生成的需要持久化的数据，如游戏的存档信息。</li>
+<li>Library/Caches: iTunes不会备份。用于保存体积大、且不需要备份的非重要数据。</li>
+<li>Library/Preferences: iTunes会备份。用于保存应用的所有偏好设置，iOS的Settings选项会在该目录中查找应用的设置信息。</li>
+<li>tmp: iTunes不会备份。用于保存应用运行时所需要的临时数据，使用完毕后应将信息从该目录中删除掉。应用没有运行时，系统也可能会清除该目录下的文件。      </li>
+</ol>
+</li>
+<li><p>目录代码访问方式</p>
+<ul>
+<li>沙盒根目录<br><code>NSString* home = NSHomeDirectory();</code></li>
+<li><p>Documents</p>
+<p>有2种方式：</p>
+<ul>
+<li>由根目录拼接”Documents”字符串：<code>NSString* documents = [home stringByAppendingPathComponent:@&quot;Documents&quot;];</code></li>
+<li><p>使用NSSearchPathForDirectoriesInDomains函数</p>
+ <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">      <span class="comment">// NSUserDomainMask表示从用户文件夹下找，YES表示展开路径中的波浪字符~(即展开绝对路径)</span></div><div class="line">    <span class="built_in">NSArray</span>* array = <span class="built_in">NSSearchPathForDirectoriesInDomains</span>(<span class="built_in">NSDocumentDirectory</span>, <span class="built_in">NSUserDomainMask</span>, <span class="literal">NO</span>);</div><div class="line"><span class="comment">// 只有一个目录符合，所以可以直接取0</span></div><div class="line">    <span class="built_in">NSString</span>* documents = [array objectAtIndex:<span class="number">0</span>];</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>Library/Caches<br>与Documents类似，不过方式2中用 NSCachesDirectory 替换 NSDocumentDirectory</p>
+</li>
+<li><p>Library/Preferences<br>使用 NSUserDefaults类存取该目录下的设置信息。详见后文。</p>
+</li>
+<li><p>tmp<br>与根目录类似，使用NSString* tmp = NSTemporaryDirectory()即可。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="存储方式"><a href="#存储方式" class="headerlink" title="存储方式"></a>存储方式</h2><p>iOS提供了5种常用的数据存储方式：</p>
+<p>文件类：</p>
+<ol>
+<li>NSUserDefaults 来设置偏好（Preference）</li>
+<li>plist属性列表(XML)</li>
+<li>NSKeyedArchiver归档 （NSCoding）</li>
+</ol>
+<p>数据库类：（虽然最终也是.db等文件形式存储，但并不是直接操作文件）</p>
+<ol>
+<li>SQLite3</li>
+<li>Core Data</li>
+</ol>
+<p>依次从轻量到重量、由简单到复杂，适用于不同的场景。</p>
+<h2 id="NSUserDefaults"><a href="#NSUserDefaults" class="headerlink" title="NSUserDefaults"></a>NSUserDefaults</h2><p>NSUserDefaults 是一个层次化的进程间的key-value持久化仓库，被优化来存储用户的设置。 NSUserDefaults is intended for relatively small amounts of data, queried very frequently, and modified occasionally. Using it in other ways may be slow or use more memory than solutions more suited to those uses.</p>
+<ul>
+<li>基本用法：</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 获得标准的userDefaults</span></div><div class="line"><span class="built_in">NSUserDefaults</span>* defaults = [<span class="built_in">NSUserDefaults</span> standardUserDefaults];</div><div class="line"><span class="comment">// 存数据</span></div><div class="line">[defaults setObject:<span class="string">@"kkk"</span> forKey:<span class="string">@"username"</span>];</div><div class="line">...</div><div class="line"><span class="comment">// 取数据</span></div><div class="line"> <span class="built_in">NSString</span>* username = [defaults objectForKey:<span class="string">@"username"</span>];</div></pre></td></tr></table></figure>
+<p>记录的数据被放在了/Libraray/Preferences/的folder里，是一个以 app identifier 命名的.plist文件，如com.XXX.mobile.APPName.plist</p>
+<p>有的文章说存完数据后，还需要再调用<code>[defaults synchronize]；</code>，使数据被立刻存入文件，防止因为程序意外退出等造成的数据丢失。<strong>Apple给出了新的说法：synchronize blocks the calling thread until all in-progress set operations have completed. This is no longer necessary.</strong> 该方法在新版本中将被废弃，因此不需要调用这个同步方法，放心set就够了。</p>
+<ul>
+<li>高级用法</li>
+</ul>
+<p>重点参考： <a href="http://blog.csdn.net/omegayy/article/details/7480567" target="_blank" rel="external">http://blog.csdn.net/omegayy/article/details/7480567</a> 和 <a href="http://mt.sohu.com/20161116/n473384662.shtml" target="_blank" rel="external">http://mt.sohu.com/20161116/n473384662.shtml</a> 这两篇文章。<br>NSUserDefaults 默认包含5个Domain，并按照这些Domain的优先顺序（由上到下），依次从search list中搜索要查找的key:</p>
+<table>
+<thead>
+<tr>
+<th>Domain</th>
+<th>State</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NSArgumentDomain</td>
+<td>volatile (变化的，每次启动app都需要设置)</td>
+<td>它由命令行参数组成(如果程序为命令行启动)，使用 NSArgumentDomain 常量标识，系统自动把命令行参数放到这个域中。</td>
+</tr>
+<tr>
+<td>Application (Identified by the app’s identifier)</td>
+<td>persistent</td>
+<td>数据文件名为.plist。使用standardUserDefaults setObject: 所保存的数据就放在该文件。</td>
+</tr>
+<tr>
+<td>NSGlobalDomain</td>
+<td>persistent</td>
+<td>包含对所有APP有效的设置项，通过NSGlobalDomain 常量标识。这个域是系统Framework用来存储整个系统适用的设置项值，不应该被APP来存储特定APP的值。如果你想修改GlobalDomain中的设置项，那么应该在applicationDomain中加入同名的设置项，来设置值。</td>
+</tr>
+<tr>
+<td>Languages Domain</td>
+<td>volatile</td>
+<td>对于AppleLanguages 设置项中的每一种语言，系统把语言相关的（language-specific）设置项值存入到基于这个语言名字命名的特定域中。很多Foundation中的类(比如：NSDate、NSDateFormatter等等)使用特定语言域中的信息修改它们的行为。</td>
+</tr>
+<tr>
+<td>NSRegistrationDomain</td>
+<td>volatile</td>
+<td>可以通过例如 NSUserDefaults.standardUserDefaults().registerDefaults([“maxCount”: 3]) 在代码中进行的最低优先级的设置</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>应用1，在NSArgumentDomain中设置语言，可以不切换iPad/iPhone的语言来测试app的国际化：<br>在App的 Arguments Passed On Launch里，添加 -AppleLanguages(zh-Hans) 启动参数，那么app使用的就是Localizable.strings(Chinese (simplified))的文件中的信息了。</li>
+<li>应用2，使用<code>NSUserDefaults.standardUserDefaults().registerDefaults([&quot;maxCount&quot;: 3])</code>来设置maxCount的默认值，如果其他domain都没有设置的话，这里最后一道防线能防止该值为0.</li>
+</ul>
+<h2 id="plist属性列表-XML"><a href="#plist属性列表-XML" class="headerlink" title="plist属性列表(XML)"></a>plist属性列表(XML)</h2><p>是一种XML格式的文件，如果对象是NSString, NSDictionary，NSData, NSNumber等类型，就可以使用NSDictionary的writeToFile:atomically:方法直接将对象写到一个plist文件中</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 将数据封装成字典</span></div><div class="line">   <span class="built_in">NSMutableDictionary</span> *dict = [<span class="built_in">NSMutableDictionary</span> dictionary];</div><div class="line">   [dict setObject:<span class="string">@"母鸡"</span> forKey:<span class="string">@"name"</span>];</div><div class="line">   [dict setObject:<span class="string">@"15013141314"</span> forKey:<span class="string">@"phone"</span>];</div><div class="line">   [dict setObject:<span class="string">@"27"</span> forKey:<span class="string">@"age"</span>];</div><div class="line">   <span class="comment">// 将字典持久化到Documents/stu.plist文件中</span></div><div class="line">   [dict writeToFile:path atomically:<span class="literal">YES</span>];</div></pre></td></tr></table></figure>
+<p>读取</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 读取Documents/stu.plist的内容，实例化NSDictionary</span></div><div class="line"><span class="built_in">NSDictionary</span> *dict = [<span class="built_in">NSDictionary</span> dictionaryWithContentsOfFile:path];</div><div class="line"><span class="built_in">NSLog</span>(<span class="string">@"name:%@"</span>, [dict objectForKey:<span class="string">@"name"</span>]);</div></pre></td></tr></table></figure>
+<p>之前介绍的 NSUserDefaults在application域做的设置也是保存在了.plist文件中。</p>
+<h2 id="NSKeyedArchiver归档-（NSCoding）"><a href="#NSKeyedArchiver归档-（NSCoding）" class="headerlink" title="NSKeyedArchiver归档 （NSCoding）"></a>NSKeyedArchiver归档 （NSCoding）</h2><p>如果对象是NSString, NSDictionary，NSData, NSNumber等类型，并且自定义的类实现了NSCoding协议，可以使用[NSKeyedArchiver archiveRootObject:]进行归档（存储）到指定文件路径，使用[NSKeyedUnarchiver unarchiveObjectWithFile:]来恢复（读取）对象。</p>
+<p><strong>这里介绍一个处理JSON简单高效的第三方库MJExtension，引入该第三方库后，只需要在 自定义的类 .m文件中 加入头文件#import “MJExtension.h”， 在@implementaion 中添加宏定义 MJCodingImplementation， 即可以自动完成 NSCoding的实现，非常方便。（该库利用了Ojbective-C的runtime特性来动态加载成员变量，实现了JSON &lt;-&gt; Object, Core Data 等数据间的自动转换， 值得使用）</strong></p>
+<h2 id="SQLite3"><a href="#SQLite3" class="headerlink" title="SQLite3"></a>SQLite3</h2><p>SQLite3是一款开源的嵌入式关系型数据库，基于c语言。可移植性好、易使用、内存开销小。<br>SQLite3常用的5种数据类型：text、integer、float、boolean、blob<br>在iOS中使用SQLite3，首先要添加库文件libsqlite3.tbd ； 然后使用sqlite3_open, sqlite3_exec, sqlite3_prepare_v2, sqlite3_finalize, sqlite3_step,等方法创建、更新数据库和表，详见 SQLite3使用</p>
+<p>由于SQLite3是直接使用类SQL语句的，因此使用不是很方便。文章使用iOS原生sqlite3框架对sqlite数据库进行操作 对SQL的增、删、改、查进行了函数层上的封装，函数参数基本为 table名，列名-值的dictionary，以及回调block, 本质上仍是组装SQL语句，不过提高了便捷性。</p>
+<h2 id="Core-Data-不提倡使用"><a href="#Core-Data-不提倡使用" class="headerlink" title="Core Data (不提倡使用)"></a>Core Data (不提倡使用)</h2><p>Core Data是对SQLite3的面向对象的封装，好处：能够合理管理内存,避免使用sql的麻烦, 更高效. 不需要我们手动去创建model类, 可以通过一些操作, 制动生成.</p>
+<p>操作过程通常分为以下几步：<br>创建管理上下可以细分为：加载模型文件-&gt;指定数据存储路径-&gt;创建对应数据类型的存储-&gt;创建管理对象上下方并指定存储。经过这几个步骤之后可以得到管理对象上下文NSManagedObjectContext，以后所有的数据操作都由此对象负责。</p>
+<p>工作原理:</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSManagedObjectContext</span> 临时数据库 向<span class="built_in">NSPersistentStoreCoordinator</span> 持久化存储助理 发送一个key(model名字)</div><div class="line"><span class="built_in">NSPersistentStoreCoordinator</span> 通过这个key 在 <span class="built_in">NSManagedObjectModel</span> 数据模型中 找到这个model 对应的 表</div><div class="line"><span class="built_in">NSManagedObjectModel</span> 将这个表名 返回给 <span class="built_in">NSPersistentStoreCoordinator</span></div><div class="line"><span class="built_in">NSPersistentStoreCoordinator</span> 通过 表名 找到 给表的 file 路径</div><div class="line"><span class="built_in">NSPersistentStoreCoordinator</span> 将这个路径 返回给 <span class="built_in">NSManagedObjectContext</span></div><div class="line"><span class="built_in">NSManagedObjectContext</span> 对 数据进行 处理(增, 删 , 该, 查)</div><div class="line"><span class="built_in">NSManagedObjectContext</span> 保存数据 save</div></pre></td></tr></table></figure>
+<p>重点参考 <a href="https://objccn.io/issues/" target="_blank" rel="external">objccn</a> 里 CoreData 一章。</p>
+<p><strong>缺点：</strong> 性能（速度和内存消耗）。假设更新10000个条目的一个字段，使用core data需载入10000个条目对象，10000次数据库操作分别修改；而使用SQL只需一条语句，一次数据库操作。 拿查阅来说，Core Data 的性能是 FMDB 的六分之一不到，Realm 的十分之一不到。<br>参看 唐巧的 <a href="http://blog.devtang.com/2016/08/04/i-do-not-like-core-data/?utm_source=tuicool&amp;utm_medium=referral" target="_blank" rel="external">我为什么不喜欢</a> Core Data [易崩溃；难学习；性能差]</p>
+<h2 id="第三方框架"><a href="#第三方框架" class="headerlink" title="第三方框架"></a>第三方框架</h2><ul>
+<li><p>FMDB<br>使用Objective-C对SQLite3进行封装的第三方库，提供多线程支持。本质上仍使用SQL语句进行表操作。详见我专门整理的一篇<a href="">FMDB使用札记</a></p>
+</li>
+<li><p>YTKKeyValueStore<br>封装提供了key-value式的条目存储方式，结果通过SQLite3自动保存到数据库。适用于LevelDB（NoSQL, 非关系型数据模型）概念的客户端数据存储。详见<a href="https://github.com/yuantiku/YTKKeyValueStore" target="_blank" rel="external">YTKKeyValueStore</a></p>
+</li>
+</ul>
+<p>一个使用例子：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">YTKKeyValueStore *store = [[YTKKeyValueStore alloc] initDBWithName:<span class="string">@"test.db"</span>];</div><div class="line"><span class="built_in">NSString</span> *tableName = <span class="string">@"user_table"</span>;</div><div class="line">[store createTableWithName:tableName];</div><div class="line"><span class="comment">// 保存</span></div><div class="line"><span class="built_in">NSString</span> *key = <span class="string">@"1"</span>;</div><div class="line"><span class="built_in">NSDictionary</span> *user = @&#123;<span class="string">@"id"</span>: @<span class="number">1</span>, <span class="string">@"name"</span>: <span class="string">@"tangqiao"</span>, <span class="string">@"age"</span>: @<span class="number">30</span>&#125;;</div><div class="line">[store putObject:user withId:key intoTable:tableName];</div><div class="line"><span class="comment">// 查询</span></div><div class="line"><span class="built_in">NSDictionary</span> *queryUser = [store getObjectById:key fromTable:tableName];</div><div class="line"><span class="built_in">NSLog</span>(<span class="string">@"query data result: %@"</span>, queryUser);</div></pre></td></tr></table></figure>
+<p>有关LevelDB, 参考 <a href="https://www.zhihu.com/question/38933764/answer/80312254" target="_blank" rel="external">https://www.zhihu.com/question/38933764/answer/80312254</a></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://www.cocoachina.com/ios/20160429/16065.html" target="_blank" rel="external">iOS本地数据存取，看这里就够了</a></li>
+<li><a href="http://www.jianshu.com/p/3cf2fe65b007" target="_blank" rel="external">iOS开发中Simulator相关路径汇总</a></li>
+<li><a href="http://blog.csdn.net/omegayy/article/details/7480567" target="_blank" rel="external">IOS设置项相关——Preferences and Settings Programming Guide</a></li>
+<li><a href="http://mt.sohu.com/20161116/n473384662.shtml" target="_blank" rel="external">NSUserDefaults - 熟悉与陌生</a></li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/技术/">技术</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://vin-zhou.github.com/2016/08/17/数据存储札记/" data-title="数据存储札记 | 没有什么能够阻挡" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/10/22/Swift编程札记/" title="Swift编程札记">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Swift编程札记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/07/20/iOS设计模式札记3-通过解耦来变得更强大的模式/"  title="iOS设计模式札记3-通过解耦来变得更强大的模式">
+ <strong>下一篇：</strong><br/> 
+ <span>iOS设计模式札记3-通过解耦来变得更强大的模式
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/17/数据存储札记/" data-title="数据存储札记" data-url="http://vin-zhou.github.com/2016/08/17/数据存储札记/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用沙盒"><span class="toc-number">2.</span> <span class="toc-text">应用沙盒</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#存储方式"><span class="toc-number">3.</span> <span class="toc-text">存储方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NSUserDefaults"><span class="toc-number">4.</span> <span class="toc-text">NSUserDefaults</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#plist属性列表-XML"><span class="toc-number">5.</span> <span class="toc-text">plist属性列表(XML)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NSKeyedArchiver归档-（NSCoding）"><span class="toc-number">6.</span> <span class="toc-text">NSKeyedArchiver归档 （NSCoding）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQLite3"><span class="toc-number">7.</span> <span class="toc-text">SQLite3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Core-Data-不提倡使用"><span class="toc-number">8.</span> <span class="toc-text">Core Data (不提倡使用)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第三方框架"><span class="toc-number">9.</span> <span class="toc-text">第三方框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">10.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/想法/" title="想法">想法<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/技术/" title="技术">技术<sup>42</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>35</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Xcode/" title="Xcode">Xcode<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Swift/" title="Swift">Swift<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Git/" title="Git">Git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/app-碎片整理/" title="app, 碎片整理">app, 碎片整理<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开源/" title="开源">开源<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">8</span></li></ul>
+  </div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Mac/" style="font-size: 13.33px;">Mac</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Swift/" style="font-size: 13.33px;">Swift</a> <a href="/tags/Vim/" style="font-size: 10px;">Vim</a> <a href="/tags/Xcode/" style="font-size: 16.67px;">Xcode</a> <a href="/tags/app-碎片整理/" style="font-size: 10px;">app, 碎片整理</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/开源/" style="font-size: 10px;">开源</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Vin. <br/>
+			Life is so beautiful. Never too late to learn.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="Vin Zhou">Vin Zhou</a>
+		
+		
+		</p>
+		<p class="copyright">
+		<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1253589886'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1253589886%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));</script>
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"vin-zhou"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

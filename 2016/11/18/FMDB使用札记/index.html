@@ -1,0 +1,585 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>FMDB使用札记 | 没有什么能够阻挡</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Vin Zhou">
+    
+
+    
+    <meta name="description" content="前言FMDB 是一款使用Objective-C对SQLite进行封装的优秀的第三方框架，加上了面向对象的思想。 优点：  使用起来更加面向对象，省去了很多麻烦、冗余的C语言代码 对比苹果自带的CoreData框架，更加轻量级和灵活 提供多线程安全，有效地防止数据混乱，原来的SQLite不是线程安全的 支持使用Swift调用  缺点：  因为是OC语言封装的，失去了SQLite原来的跨平台性  FM">
+<meta name="keywords" content="iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FMDB使用札记">
+<meta property="og:url" content="http://vin-zhou.github.com/2016/11/18/FMDB使用札记/index.html">
+<meta property="og:site_name" content="没有什么能够阻挡">
+<meta property="og:description" content="前言FMDB 是一款使用Objective-C对SQLite进行封装的优秀的第三方框架，加上了面向对象的思想。 优点：  使用起来更加面向对象，省去了很多麻烦、冗余的C语言代码 对比苹果自带的CoreData框架，更加轻量级和灵活 提供多线程安全，有效地防止数据混乱，原来的SQLite不是线程安全的 支持使用Swift调用  缺点：  因为是OC语言封装的，失去了SQLite原来的跨平台性  FM">
+<meta property="og:updated_time" content="2017-05-17T10:01:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="FMDB使用札记">
+<meta name="twitter:description" content="前言FMDB 是一款使用Objective-C对SQLite进行封装的优秀的第三方框架，加上了面向对象的思想。 优点：  使用起来更加面向对象，省去了很多麻烦、冗余的C语言代码 对比苹果自带的CoreData框架，更加轻量级和灵活 提供多线程安全，有效地防止数据混乱，原来的SQLite不是线程安全的 支持使用Swift调用  缺点：  因为是OC语言封装的，失去了SQLite原来的跨平台性  FM">
+
+    
+    <link rel="alternative" href="/atom.xml" title="没有什么能够阻挡" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="没有什么能够阻挡" title="没有什么能够阻挡"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="没有什么能够阻挡">没有什么能够阻挡</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:vin-zhou.github.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/11/18/FMDB使用札记/" title="FMDB使用札记" itemprop="url">FMDB使用札记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Vin Zhou" target="_blank" itemprop="author">Vin Zhou</a>
+		
+  <p class="article-time">
+    <time datetime="2016-11-18T00:53:55.000Z" itemprop="datePublished"> 发表于 Nov 18 2016</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装"><span class="toc-number">2.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用"><span class="toc-number">3.</span> <span class="toc-text">使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建数据库"><span class="toc-number">4.</span> <span class="toc-text">创建数据库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#打开数据库"><span class="toc-number">5.</span> <span class="toc-text">打开数据库</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#执行更新"><span class="toc-number">5.1.</span> <span class="toc-text">执行更新</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#执行查询"><span class="toc-number">6.</span> <span class="toc-text">执行查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关闭数据库"><span class="toc-number">7.</span> <span class="toc-text">关闭数据库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#事务"><span class="toc-number">8.</span> <span class="toc-text">事务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用线程安全的FMDatabaseQueue"><span class="toc-number">9.</span> <span class="toc-text">使用线程安全的FMDatabaseQueue</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">10.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><a href="">FMDB</a> 是一款使用Objective-C对SQLite进行封装的优秀的第三方框架，加上了面向对象的思想。</p>
+<p>优点：</p>
+<ul>
+<li>使用起来更加面向对象，省去了很多麻烦、冗余的C语言代码</li>
+<li>对比苹果自带的CoreData框架，更加轻量级和灵活</li>
+<li>提供多线程安全，有效地防止数据混乱，原来的SQLite不是线程安全的</li>
+<li>支持使用Swift调用</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>因为是OC语言封装的，失去了SQLite原来的跨平台性</li>
+</ul>
+<p>FMDB的方方面面在Github上已经交代的比较明白，这里自己再总结摘要一下。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><ul>
+<li>在Github上下载FMBDB源码，将文件拖入工程</li>
+<li>在项目target的Build Phases-&gt;Link Bianry With Libraries中添加libsqlite3.tbd依赖库</li>
+<li>#import “FMDatabase.h”<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2>主要包含如下三个类：</li>
+<li>FMDatabase - 代表一个SQLite数据库，用来在单一线程中执行SQL语句，线程不安全。</li>
+<li>FMResultSet - 代表执行一次查询后的结果。</li>
+<li>FMDatabaseQueue - 用于多线程操作数据库的查询和更新，线程安全。</li>
+</ul>
+<h2 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h2><p>支持传入3种文件路径：</p>
+<ul>
+<li>传入真实的文件系统路径，如不存在该文件，将自动创建；</li>
+<li>传入空字符串@””. 创建一个本地的临时数据库，当FMDatabase连接关掉后将被自动删除；</li>
+<li>传入NULL.创建一个in-memory数据库，当FMDatabase连接关掉后将被自动释放。</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSArray</span>* array = <span class="built_in">NSSearchPathForDirectoriesInDomains</span>(<span class="built_in">NSDocumentDirectory</span>, <span class="built_in">NSUserDomainMask</span>, <span class="literal">YES</span>);</div><div class="line"><span class="built_in">NSString</span>* documents = [array objectAtIndex:<span class="number">0</span>];</div><div class="line"><span class="built_in">NSString</span>* path = [documents stringByAppendingPathComponent:<span class="string">@"test.db"</span>];</div><div class="line">FMDatabase* db = [FMDatabase databaseWithPath:path];</div></pre></td></tr></table></figure>
+<h2 id="打开数据库"><a href="#打开数据库" class="headerlink" title="打开数据库"></a>打开数据库</h2><p>在使用之前，必须先调用open函数，保证数据库被打开。当资源不足或权限不够时，可能会open失败，这时需要返回，无法后续操作。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (![db open]) &#123;</div><div class="line">    db = <span class="literal">nil</span>;</div><div class="line">    <span class="keyword">return</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="执行更新"><a href="#执行更新" class="headerlink" title="执行更新"></a>执行更新</h3><p>任何不以<strong>SELECT</strong>开头的SQL操作都属于更新操作，包括 <strong>CREATE, UPDATE, INSERT, ALTER, COMMIT, BEGIN, DETACH, DELETE, DROP, END, EXPLAIN, VACUUM</strong>, 以及 <strong>REPLACE</strong> 等，通过-<code>executeUpate...</code>这种方法来执行，执行更新正确会返回YES，否则返回NO。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">BOOL</span> updateResult = [db executeUpdate:<span class="string">@"CREATE TABLE myTable (num integer, name varchar(7), sex char(1), primary key(num))"</span>];</div><div class="line"><span class="keyword">if</span> (!updateResult) &#123;<span class="keyword">return</span>;&#125;</div><div class="line">updateResult =  [db executeUpdate:<span class="string">@"INSERT INTO myTable(num, name, sex) values(?,?,?)"</span>, @<span class="number">0</span>, <span class="string">@"hha"</span>, <span class="string">@"m"</span>];</div></pre></td></tr></table></figure>
+<h2 id="执行查询"><a href="#执行查询" class="headerlink" title="执行查询"></a>执行查询</h2><p>一个<strong>SELECT</strong>查询语句将通过<code>-executeQuery...</code>这种方法来执行，如果正确，返回一个FMResultSet对象，否则返回nil。必须使用-lastErrorMessage和-lastErrorCode方法来查询为何执行失败。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">FMResultSet* result = [db executeQuery:<span class="string">@"SELECT * FROM myTable"</span>];</div><div class="line"><span class="built_in">NSMutableArray</span> *array = [<span class="built_in">NSMutableArray</span> array];</div><div class="line"><span class="keyword">while</span> ([result next]) &#123;</div><div class="line">    <span class="comment">//根据字段名，获取记录的值，存储到字典中</span></div><div class="line">    <span class="built_in">NSMutableDictionary</span> *dict = [<span class="built_in">NSMutableDictionary</span> dictionary];</div><div class="line">    <span class="keyword">int</span> num  = [result intForColumn:<span class="string">@"num"</span>];</div><div class="line">    <span class="built_in">NSString</span> *name = [result stringForColumn:<span class="string">@"name"</span>];</div><div class="line">    <span class="built_in">NSString</span> *sex  = [result stringForColumn:<span class="string">@"sex"</span>];</div><div class="line">    dict[<span class="string">@"num"</span>] = @(num);</div><div class="line">    dict[<span class="string">@"name"</span>] = name;</div><div class="line">    dict[<span class="string">@"sex"</span>] = sex;</div><div class="line">    <span class="comment">//把字典添加进数组中</span></div><div class="line">    [array addObject:dict];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="关闭数据库"><a href="#关闭数据库" class="headerlink" title="关闭数据库"></a>关闭数据库</h2><p>调用close方法即可。</p>
+<h2 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h2><p>事务，是指作为单个逻辑工作单元执行的一系列操作，要么完整地执行，要么完全地不执行。<br>想象一个场景，比如你要更新数据库的大量数据，我们需要确保所有的数据更新成功，才采取这种更新方案，如果在更新期间出现错误，就不能采取这种更新方案了，如果我们不使用事务，我们的更新操作直接对每个记录生效，万一遇到更新错误，已经更新的数据怎么办？难道我们要一个一个去找出来修改回来吗？怎么知道原来的数据是怎么样的呢？这个时候就需要使用事务实现。</p>
+<p>SQLite进行事务处理：</p>
+<ul>
+<li>只要在执行SQL语句前加上以下的SQL语句，就可以使用事务功能了：</li>
+<li>开启事务的SQL语句，”begin transaction;”</li>
+<li>进行提交的SQL语句，”commit transaction;”</li>
+<li>进行回滚的SQL语句，”rollback transaction;”</li>
+</ul>
+<p>FMDatabase使用事务：<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//事务 </span></div><div class="line">-(<span class="keyword">void</span>)transaction &#123;</div><div class="line">    <span class="comment">// 开启事务</span></div><div class="line">    [<span class="keyword">self</span>.database beginTransaction]; </div><div class="line">    <span class="built_in">BOOL</span> isRollBack = <span class="literal">NO</span>; </div><div class="line">    <span class="keyword">@try</span> &#123; </div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;<span class="number">500</span>; i++) &#123; </div><div class="line">            <span class="built_in">NSNumber</span> *num = @(i+<span class="number">1</span>); </div><div class="line">            <span class="built_in">NSString</span> *name = [[<span class="built_in">NSString</span> alloc] initWithFormat:<span class="string">@"student_%d"</span>,i]; </div><div class="line">            <span class="built_in">NSString</span> *sex = (i%<span class="number">2</span>==<span class="number">0</span>)?<span class="string">@"f"</span>:<span class="string">@"m"</span>;</div><div class="line">            <span class="built_in">NSString</span> *sql = <span class="string">@"insert into mytable(num,name,sex) values(?,?,?);"</span>; </div><div class="line">            <span class="built_in">BOOL</span> result = [database executeUpdate:sql,num,name,sex]; </div><div class="line">            <span class="keyword">if</span> ( !result ) &#123; </div><div class="line">                <span class="built_in">NSLog</span>(<span class="string">@"插入失败！"</span>);</div><div class="line">                <span class="keyword">return</span>; </div><div class="line">            &#125; </div><div class="line">        &#125; </div><div class="line">    &#125; </div><div class="line">    <span class="keyword">@catch</span> (<span class="built_in">NSException</span> *exception) &#123; </div><div class="line">        isRollBack = <span class="literal">YES</span>; </div><div class="line">        <span class="comment">// 事务回退</span></div><div class="line">        [<span class="keyword">self</span>.database rollback]; </div><div class="line">    &#125; </div><div class="line">    <span class="keyword">@finally</span> &#123; </div><div class="line">        <span class="keyword">if</span> (!isRollBack) &#123; </div><div class="line">            <span class="comment">//事务提交</span></div><div class="line">            [<span class="keyword">self</span>.database commit]; </div><div class="line">        &#125; </div><div class="line">    &#125; </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="使用线程安全的FMDatabaseQueue"><a href="#使用线程安全的FMDatabaseQueue" class="headerlink" title="使用线程安全的FMDatabaseQueue"></a>使用线程安全的FMDatabaseQueue</h2><p>不能在线程间共用一个FMDatabase, 否则会造成数据混乱! 如果需要使用多线程，应该使用线程安全的FMDatabaseQueue. （#import “FMDatabaseQueue.h” 即可）<br>FMDatabaseQueue的操作与FMDatabase非常类似，如</p>
+<ul>
+<li>创建<br><code>FMDatabaseQueue* queue = [FMDatabaseQueue databaseQueueWithPath: aPath];</code></li>
+<li><p>操作</p>
+<p>将FMDatabase中的操作放到</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[queue inDatabase:^(FMdatabase*db)&#123;</div><div class="line">	<span class="comment">//FMDatabase操作</span></div><div class="line">&#125;];</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>即可。</p>
+ <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[queue inDatabase:^(FMDatabase*db) &#123;</div><div class="line">    <span class="comment">//插入记录到表中</span></div><div class="line">    <span class="built_in">NSString</span> *sqlStr = <span class="string">@"insert into mytable(num,name,sex) values(4,'xiaoming','m');"</span>;</div><div class="line">    <span class="built_in">BOOL</span> result = [db executeUpdate:sqlStr];</div><div class="line">    <span class="keyword">if</span> (!result) &#123;</div><div class="line">        <span class="built_in">NSLog</span>(<span class="string">@"error when insert into database table"</span>);</div><div class="line">        [db close];</div><div class="line">    &#125;</div><div class="line">&#125;];</div></pre></td></tr></table></figure>
+<ul>
+<li><p>事务</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//多线程事务 </span></div><div class="line">- (<span class="keyword">void</span>)transactionByQueue &#123; </div><div class="line">    <span class="comment">//开启事务</span></div><div class="line">    [<span class="keyword">self</span>.queue inTransaction:^(FMDatabase *db, <span class="built_in">BOOL</span> *rollback) &#123;</div><div class="line">         <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;<span class="number">500</span>; i++) &#123; </div><div class="line">            <span class="built_in">NSNumber</span> *num = @(i+<span class="number">1</span>); </div><div class="line">            <span class="built_in">NSString</span> *name = [[<span class="built_in">NSString</span> alloc] initWithFormat:<span class="string">@"student_%d"</span>,i]; </div><div class="line">            <span class="built_in">NSString</span> *sex = (i%<span class="number">2</span>==<span class="number">0</span>)?<span class="string">@"f"</span>:<span class="string">@"m"</span>;</div><div class="line">            <span class="built_in">NSString</span> *sql = <span class="string">@"insert into mytable(num,name,sex) values(?,?,?);"</span>; </div><div class="line">            <span class="built_in">BOOL</span> result = [db executeUpdate:sql,num,name,sex]; </div><div class="line">            <span class="keyword">if</span> ( !result ) &#123; </div><div class="line">                <span class="comment">//当最后*rollback的值为YES的时候，事务回退，如果最后*rollback为NO，事务提交</span></div><div class="line">                *rollback = <span class="literal">YES</span>;</div><div class="line">                 <span class="keyword">return</span>; </div><div class="line">            &#125; </div><div class="line">        &#125;</div><div class="line">     &#125;]; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.jianshu.com/p/82b2b06e3172" target="_blank" rel="external">iOS学习笔记17-FMDB你好!</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/技术/">技术</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://vin-zhou.github.com/2016/11/18/FMDB使用札记/" data-title="FMDB使用札记 | 没有什么能够阻挡" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/07/26/探究Objective-C-之Runloop/" title="探究Objective-C-之Runloop">
+  <strong>上一篇：</strong><br/>
+  <span>
+  探究Objective-C-之Runloop</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/10/29/矢量图标管理/"  title="矢量图标管理">
+ <strong>下一篇：</strong><br/> 
+ <span>矢量图标管理
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/11/18/FMDB使用札记/" data-title="FMDB使用札记" data-url="http://vin-zhou.github.com/2016/11/18/FMDB使用札记/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装"><span class="toc-number">2.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用"><span class="toc-number">3.</span> <span class="toc-text">使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建数据库"><span class="toc-number">4.</span> <span class="toc-text">创建数据库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#打开数据库"><span class="toc-number">5.</span> <span class="toc-text">打开数据库</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#执行更新"><span class="toc-number">5.1.</span> <span class="toc-text">执行更新</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#执行查询"><span class="toc-number">6.</span> <span class="toc-text">执行查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关闭数据库"><span class="toc-number">7.</span> <span class="toc-text">关闭数据库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#事务"><span class="toc-number">8.</span> <span class="toc-text">事务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用线程安全的FMDatabaseQueue"><span class="toc-number">9.</span> <span class="toc-text">使用线程安全的FMDatabaseQueue</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">10.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/想法/" title="想法">想法<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/技术/" title="技术">技术<sup>42</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>35</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Xcode/" title="Xcode">Xcode<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Swift/" title="Swift">Swift<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Git/" title="Git">Git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/app-碎片整理/" title="app, 碎片整理">app, 碎片整理<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开源/" title="开源">开源<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">8</span></li></ul>
+  </div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Mac/" style="font-size: 13.33px;">Mac</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Swift/" style="font-size: 13.33px;">Swift</a> <a href="/tags/Vim/" style="font-size: 10px;">Vim</a> <a href="/tags/Xcode/" style="font-size: 16.67px;">Xcode</a> <a href="/tags/app-碎片整理/" style="font-size: 10px;">app, 碎片整理</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/开源/" style="font-size: 10px;">开源</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Vin. <br/>
+			Life is so beautiful. Never too late to learn.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="Vin Zhou">Vin Zhou</a>
+		
+		
+		</p>
+		<p class="copyright">
+		<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1253589886'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1253589886%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));</script>
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"vin-zhou"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

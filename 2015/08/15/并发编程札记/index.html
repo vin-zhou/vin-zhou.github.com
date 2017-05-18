@@ -1,0 +1,603 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>并发编程札记 | 没有什么能够阻挡</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Vin Zhou">
+    
+
+    
+    <meta name="description" content="重点参考自 关于iOS多线程，你看我就够了。 这里只对关键的点做一总结。 iOS提供4种多线程方式：Pthreads\NSThread\Grand Central Dispatch(GCD)\NSOperation 其封装性、OO性依次由低到高。 NSThread线程的几种状态： 新建状态，就绪状态（调用start后，并不马上执行，而需等待系统真正调用），运行状态，阻塞状态（sleep），停止状态">
+<meta name="keywords" content="iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="并发编程札记">
+<meta property="og:url" content="http://vin-zhou.github.com/2015/08/15/并发编程札记/index.html">
+<meta property="og:site_name" content="没有什么能够阻挡">
+<meta property="og:description" content="重点参考自 关于iOS多线程，你看我就够了。 这里只对关键的点做一总结。 iOS提供4种多线程方式：Pthreads\NSThread\Grand Central Dispatch(GCD)\NSOperation 其封装性、OO性依次由低到高。 NSThread线程的几种状态： 新建状态，就绪状态（调用start后，并不马上执行，而需等待系统真正调用），运行状态，阻塞状态（sleep），停止状态">
+<meta property="og:updated_time" content="2017-05-17T09:57:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="并发编程札记">
+<meta name="twitter:description" content="重点参考自 关于iOS多线程，你看我就够了。 这里只对关键的点做一总结。 iOS提供4种多线程方式：Pthreads\NSThread\Grand Central Dispatch(GCD)\NSOperation 其封装性、OO性依次由低到高。 NSThread线程的几种状态： 新建状态，就绪状态（调用start后，并不马上执行，而需等待系统真正调用），运行状态，阻塞状态（sleep），停止状态">
+
+    
+    <link rel="alternative" href="/atom.xml" title="没有什么能够阻挡" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="没有什么能够阻挡" title="没有什么能够阻挡"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="没有什么能够阻挡">没有什么能够阻挡</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:vin-zhou.github.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/08/15/并发编程札记/" title="并发编程札记" itemprop="url">并发编程札记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Vin Zhou" target="_blank" itemprop="author">Vin Zhou</a>
+		
+  <p class="article-time">
+    <time datetime="2015-08-15T03:13:45.000Z" itemprop="datePublished"> 发表于 Aug 15 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#使用NSCondition控制NSThread线程通信"><span class="toc-number">1.</span> <span class="toc-text">使用NSCondition控制NSThread线程通信</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#同步-异步-与-串行-并行"><span class="toc-number">2.</span> <span class="toc-text">同步/异步 与 串行/并行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程同步"><span class="toc-number">3.</span> <span class="toc-text">线程同步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#延迟执行"><span class="toc-number">4.</span> <span class="toc-text">延迟执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#从其他线程放到主线程执行"><span class="toc-number">5.</span> <span class="toc-text">从其他线程放到主线程执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重写NSOpeation子类"><span class="toc-number">6.</span> <span class="toc-text">重写NSOpeation子类</span></a></li></ol>
+		
+		</div>
+		
+		<p>重点参考自 <a href="http://www.jianshu.com/p/0b0d9b1f1f19" target="_blank" rel="external">关于iOS多线程，你看我就够了</a>。 这里只对关键的点做一总结。</p>
+<p>iOS提供4种多线程方式：Pthreads\NSThread\Grand Central Dispatch(GCD)\NSOperation</p>
+<p>其封装性、OO性依次由低到高。</p>
+<p>NSThread线程的几种状态： 新建状态，就绪状态（调用start后，并不马上执行，而需等待系统真正调用），运行状态，阻塞状态（sleep），停止状态。</p>
+<h2 id="使用NSCondition控制NSThread线程通信"><a href="#使用NSCondition控制NSThread线程通信" class="headerlink" title="使用NSCondition控制NSThread线程通信"></a>使用NSCondition控制NSThread线程通信</h2><p>NSCondition类（充当信号量）提供了如下3种方法：</p>
+<ul>
+<li>wait: 该方法导致当前线程一直等待，直到其他线程调用该NSCondition的signal方法或broadcast方法唤醒该线程。 wait方法的一个变体：- （BOOL）waitUntilData:,用于控制的等待的时间点；</li>
+<li>signal: 唤醒在此NSCondition对象上等待的单个线程。如果所有线程都在该NSCondition对象上等待，则会任意选择唤醒其中一个线程。只有当前线程使用wait方法后，才可以执行被唤醒；</li>
+<li>broadcast: 唤醒在此NSCondition对象等待的所有线程。只有当前线程使用wait方法后，才可以执行被唤醒。</li>
+</ul>
+<p>NSCondition调用方法前需要加锁，防止被同步篡改。</p>
+<p>NSOperation对比GCD的好处是可以方便地cancel。还可以自定义NSOperation子类，实现 main, cancel.; NSOperationQueue中的NSOperation可以设置依赖（先后）关系。</p>
+<h2 id="同步-异步-与-串行-并行"><a href="#同步-异步-与-串行-并行" class="headerlink" title="同步/异步 与 串行/并行"></a>同步/异步 与 串行/并行</h2><ul>
+<li><p>如果是 同步（sync） 操作，它会阻塞当前线程并等待 Block 中的任务执行完毕，然后当前线程才会继续往下运行，因此没有使用其他线程。</p>
+</li>
+<li><p>如果是 异步（async）操作，当前线程会直接往下执行，它不会阻塞当前线程，因此会使用其他线程。</p>
+</li>
+<li><p>串行队列：放到串行队列的任务，GCD 会 FIFO（先进先出） 地取出来一个，执行一个，然后取下一个，这样一个一个的执行。</p>
+</li>
+<li><p>并行队列：放到并行队列的任务，GCD 也会 FIFO的取出来，但不同的是，它取出来一个就会放到别的线程，然后再取出来一个又放到另一个的线程。这样由于取的动作很快，忽略不计，看起来，所有的任务都是一起执行的。不过需要注意，GCD 会根据系统资源控制并行的数量，所以如果任务很多，它并不会让所有任务同时执行。</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>同步执行（只用当前线程）</th>
+<th>异步执行 （只用其他线程）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>串行队列</td>
+<td>当前线程，一个一个依次执行    其他线程，一个一个依次执行</td>
+</tr>
+<tr>
+<td>并行队列</td>
+<td>当前线程，一个一个依次执行    开很多线程，一起执行</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>dipatch_apply: 异步 多次执行同一个代码块</li>
+<li>dipatch_once: 用主线程执行代码块一次</li>
+</ul>
+<h2 id="线程同步"><a href="#线程同步" class="headerlink" title="线程同步"></a>线程同步</h2><p>所谓线程同步就是为了防止多个线程抢夺同一个资源造成的数据安全问题，所采取的一种措施。有如下2种方法：</p>
+<ul>
+<li>互斥锁<br>给需要同步的代码块加一个互斥锁，就可以保证每次只有一个线程访问此代码块：</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"> <span class="comment">// 方法一： @synchronized()&#123;&#125; 自动加锁</span></div><div class="line">@synchorinized(<span class="keyword">self</span>) &#123;</div><div class="line">  	<span class="comment">// 需要执行的代码块</span></div><div class="line">  &#125;</div><div class="line">  </div><div class="line"> <span class="comment">// 方法二：手动加NSLock</span></div><div class="line"> <span class="built_in">NSLock</span>* lock;</div><div class="line"> [lock lock]; <span class="comment">// 加锁</span></div><div class="line">    <span class="comment">// 需要执行的代码块</span></div><div class="line">  ...</div><div class="line">  [lock unlock]; <span class="comment">// 释放</span></div><div class="line">  </div><div class="line"> <span class="comment">// 方法三：手动加OSSPinLock锁</span></div><div class="line"> <span class="comment">// 1. 定义一个自旋锁property</span></div><div class="line"> OSSpinLock _storelock; <span class="comment">// 需 #import &lt;libkern/OSAtomic.h&gt;</span></div><div class="line"> <span class="comment">// 2. 使用</span></div><div class="line"> OSSpinLockLock(&amp;_storelock);</div><div class="line"> <span class="comment">// 需要执行的代码块</span></div><div class="line">  ...</div><div class="line"> OSSpinLockUnlock(&amp;_storelock);</div></pre></td></tr></table></figure>
+<ul>
+<li>同步执行<br>把多个线程都要执行的代码块添加到同一个串行队列，这样就防止了资源的抢夺。</li>
+</ul>
+<p>GCD</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"> <span class="comment">// 1. 通过一个全局的单例对象MyQueueManager，提供一个全局的串行队列globalSearialQueue</span></div><div class="line"> <span class="keyword">static</span> MyQueueManager* _instance;</div><div class="line"> + MyQueueManager* shareInstance &#123;</div><div class="line">     <span class="keyword">static</span> <span class="built_in">dispatch_once_t</span> onceToken;</div><div class="line">     <span class="built_in">dispatch_once</span>(&amp;onceToken, ^&#123;</div><div class="line">     	_instance = [[MyQueueManager alloc] init];</div><div class="line">     &#125;);</div><div class="line">     <span class="keyword">return</span> _instance;</div><div class="line"> &#125;</div><div class="line"> - (<span class="built_in">dispatch_queue_t</span>) globalSerialQueue &#123;</div><div class="line">     <span class="keyword">if</span> (_globalSerialQueue == <span class="literal">nil</span>) &#123;</div><div class="line">         _globalSerialQueue = dispatch_queue_create(<span class="string">"GlobalSearialQueue"</span>, DISPATCH_QUEUE_SERIAL);</div><div class="line">     &#125;</div><div class="line"><span class="keyword">return</span> _globalSerialQueue;</div><div class="line"> &#125;</div><div class="line"> <span class="comment">// 2. 使用该queue，加入dispatch_sync同步代码块</span></div><div class="line"> <span class="built_in">dispatch_queue_t</span> queue = [MyQueueManager shareInstance].globalSearialQueue;</div><div class="line"> <span class="built_in">dispatch_sync</span>(queue, ^&#123;</div><div class="line"> 	<span class="comment">// 需要执行的代码块</span></div><div class="line">  	...</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>NSOperation</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 1. 同样生成一个全局的NSOperationQueue,其最大并发数 maxConcurrentOperationCount = 1, 用来将所有操作都添加到这个queue中</span></div><div class="line">... 略</div><div class="line"><span class="comment">// 2. 加入operation到queue中</span></div><div class="line">    <span class="built_in">NSBlockOperation</span>* operation = [<span class="built_in">NSBlockOperation</span> blockOperationWithBlock:^&#123;</div><div class="line">    <span class="comment">// 需要执行的代码块</span></div><div class="line">&#125;];</div><div class="line">[queue addOperation:operation];</div><div class="line"><span class="comment">// 3. 如果后续操作需要operation中的block的结果，可以调用</span></div><div class="line">[operation waitUntilFinished]; <span class="comment">// 阻塞当前线程直至完成</span></div></pre></td></tr></table></figure>
+<h2 id="延迟执行"><a href="#延迟执行" class="headerlink" title="延迟执行"></a>延迟执行</h2><p>所谓延迟执行就是延时一段时间再执行某段代码。有如下3种方式：</p>
+<ul>
+<li><p>perform<br><code>[self preformSelector:@selector(run:) withObject@&quot;abc&quot; afterDelay:3]; // 延迟3s</code></p>
+</li>
+<li><p>GCD</p>
+</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_queue_t</span> queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, <span class="number">0</span>);</div><div class="line">dispatch_after(dispatch_time(DISPATCH_TIME_NOW，(int64_t)( <span class="number">3</span>* <span class="built_in">NSEC_PER_SEC</span>)), queue ^&#123;</div><div class="line">	<span class="comment">// 需要执行的代码</span></div><div class="line">&#125; );</div></pre></td></tr></table></figure>
+<ul>
+<li>NSTimer</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">   <span class="comment">// 该timer会被自动添加到当前的run loop中，并在指定的3s后发送run:消息到self,完成方法调用</span></div><div class="line">[<span class="built_in">NSTimer</span> scheduledTimerWithTimeInterval: <span class="number">3.0</span> target:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(run:) userInfo:<span class="string">@"abc"</span> repeats:<span class="literal">NO</span>];</div><div class="line">   <span class="comment">// 或者</span></div><div class="line">   <span class="built_in">NSTimer</span>* timer = [<span class="built_in">NSTimer</span> timerWithTimeInterval: <span class="number">3.0</span> target:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(run:) userInfo:<span class="string">@"abc"</span> repeats:<span class="literal">NO</span>];</div><div class="line">   <span class="built_in">NSRunLoop</span>* runner = [<span class="built_in">NSRunLoop</span> currentRunLoop];</div><div class="line">   runner addTimer:timer forMode: <span class="built_in">NSDefaultRunLoopMode</span>];</div><div class="line">   [timer fire]; <span class="comment">//手动开始计时</span></div></pre></td></tr></table></figure>
+<h2 id="从其他线程放到主线程执行"><a href="#从其他线程放到主线程执行" class="headerlink" title="从其他线程放到主线程执行"></a>从其他线程放到主线程执行</h2><p>主要有3种：</p>
+<ul>
+<li>NSThread</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[<span class="keyword">self</span> performSelectorOnMainThread:<span class="keyword">@selector</span>(run:) withObject:<span class="string">@"aaa"</span> waitUntilDoen:<span class="literal">NO</span>];</div></pre></td></tr></table></figure>
+<ul>
+<li>GCD</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_async</span>(dispatch_get_main_queue(), ^&#123;</div><div class="line">   	....</div><div class="line">   &#125;);</div><div class="line">   </div><div class="line">* <span class="built_in">NSOperation</span></div><div class="line"></div><div class="line">```objc</div><div class="line">[[<span class="built_in">NSOperationQueue</span> mainQueue] addOperationWithBlock:^&#123;</div><div class="line">       ....</div><div class="line">   &#125;];</div></pre></td></tr></table></figure>
+<h2 id="重写NSOpeation子类"><a href="#重写NSOpeation子类" class="headerlink" title="重写NSOpeation子类"></a>重写NSOpeation子类</h2><p>重写NSOperation的main方法即可。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/技术/">技术</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://vin-zhou.github.com/2015/08/15/并发编程札记/" data-title="并发编程札记 | 没有什么能够阻挡" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/08/17/同步数据札记/" title="同步数据札记">
+  <strong>上一篇：</strong><br/>
+  <span>
+  同步数据札记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/03/25/Vim-使用手册/"  title="Vim 使用手册">
+ <strong>下一篇：</strong><br/> 
+ <span>Vim 使用手册
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/08/15/并发编程札记/" data-title="并发编程札记" data-url="http://vin-zhou.github.com/2015/08/15/并发编程札记/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#使用NSCondition控制NSThread线程通信"><span class="toc-number">1.</span> <span class="toc-text">使用NSCondition控制NSThread线程通信</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#同步-异步-与-串行-并行"><span class="toc-number">2.</span> <span class="toc-text">同步/异步 与 串行/并行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程同步"><span class="toc-number">3.</span> <span class="toc-text">线程同步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#延迟执行"><span class="toc-number">4.</span> <span class="toc-text">延迟执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#从其他线程放到主线程执行"><span class="toc-number">5.</span> <span class="toc-text">从其他线程放到主线程执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重写NSOpeation子类"><span class="toc-number">6.</span> <span class="toc-text">重写NSOpeation子类</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/想法/" title="想法">想法<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/技术/" title="技术">技术<sup>42</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>35</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Xcode/" title="Xcode">Xcode<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Swift/" title="Swift">Swift<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Git/" title="Git">Git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/app-碎片整理/" title="app, 碎片整理">app, 碎片整理<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开源/" title="开源">开源<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">8</span></li></ul>
+  </div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Mac/" style="font-size: 13.33px;">Mac</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Swift/" style="font-size: 13.33px;">Swift</a> <a href="/tags/Vim/" style="font-size: 10px;">Vim</a> <a href="/tags/Xcode/" style="font-size: 16.67px;">Xcode</a> <a href="/tags/app-碎片整理/" style="font-size: 10px;">app, 碎片整理</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/开源/" style="font-size: 10px;">开源</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Vin. <br/>
+			Life is so beautiful. Never too late to learn.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="Vin Zhou">Vin Zhou</a>
+		
+		
+		</p>
+		<p class="copyright">
+		<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1253589886'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1253589886%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));</script>
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"vin-zhou"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

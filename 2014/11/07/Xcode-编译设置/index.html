@@ -1,0 +1,568 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Xcode 编译设置 | 没有什么能够阻挡</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Vin Zhou">
+    
+
+    
+    <meta name="description" content="Parameter 说明     Link With Standard Libraries = YES 用标准库连接   info.plist Output Encoding = binary Info.plist输出编码为二进制   GCC_ENABLE_OBJC_GC = unsupported 垃圾回收关闭   Generate Debug Symbols = YES 生成调试符号">
+<meta name="keywords" content="Xcode">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Xcode 编译设置">
+<meta property="og:url" content="http://vin-zhou.github.com/2014/11/07/Xcode-编译设置/index.html">
+<meta property="og:site_name" content="没有什么能够阻挡">
+<meta property="og:description" content="Parameter 说明     Link With Standard Libraries = YES 用标准库连接   info.plist Output Encoding = binary Info.plist输出编码为二进制   GCC_ENABLE_OBJC_GC = unsupported 垃圾回收关闭   Generate Debug Symbols = YES 生成调试符号">
+<meta property="og:updated_time" content="2014-11-08T00:26:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Xcode 编译设置">
+<meta name="twitter:description" content="Parameter 说明     Link With Standard Libraries = YES 用标准库连接   info.plist Output Encoding = binary Info.plist输出编码为二进制   GCC_ENABLE_OBJC_GC = unsupported 垃圾回收关闭   Generate Debug Symbols = YES 生成调试符号">
+
+    
+    <link rel="alternative" href="/atom.xml" title="没有什么能够阻挡" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="没有什么能够阻挡" title="没有什么能够阻挡"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="没有什么能够阻挡">没有什么能够阻挡</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:vin-zhou.github.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/11/07/Xcode-编译设置/" title="Xcode 编译设置" itemprop="url">Xcode 编译设置</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Vin Zhou" target="_blank" itemprop="author">Vin Zhou</a>
+		
+  <p class="article-time">
+    <time datetime="2014-11-07T03:40:19.000Z" itemprop="datePublished"> 发表于 Nov 7 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#pch文件（预编译头文件）"><span class="toc-number">1.</span> <span class="toc-text">.pch文件（预编译头文件）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Info-plist文件"><span class="toc-number">2.</span> <span class="toc-text">Info.plist文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#InfoPlist-strings"><span class="toc-number">3.</span> <span class="toc-text">InfoPlist.strings</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置Xcode指令集"><span class="toc-number">4.</span> <span class="toc-text">设置Xcode指令集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Architectures"><span class="toc-number">4.1.</span> <span class="toc-text">Architectures</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Valid-Architecures"><span class="toc-number">4.2.</span> <span class="toc-text">Valid Architecures</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Build-Active-Architecture-Only"><span class="toc-number">4.3.</span> <span class="toc-text">Build Active Architecture Only</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何选择支持的指令集"><span class="toc-number">5.</span> <span class="toc-text">如何选择支持的指令集</span></a></li></ol>
+		
+		</div>
+		
+		<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Link With Standard Libraries = YES</td>
+<td>用标准库连接</td>
+</tr>
+<tr>
+<td>info.plist Output Encoding = binary</td>
+<td>Info.plist输出编码为二进制</td>
+</tr>
+<tr>
+<td>GCC_ENABLE_OBJC_GC = unsupported</td>
+<td>垃圾回收关闭</td>
+</tr>
+<tr>
+<td>Generate Debug Symbols = YES</td>
+<td>生成调试符号</td>
+</tr>
+</tbody>
+</table>
+<p>编译器选择：<br>   Xcode 6.1 默认提供的是 Apple LLVM 6.0。 关于LLVM和GCC的恩怨，可见文章：<a href="http://www.cnblogs.com/ydhliphonedev/archive/2012/08/29/2661726.html" target="_blank" rel="external">XCode 编译器介绍</a></p>
+<h2 id="pch文件（预编译头文件）"><a href="#pch文件（预编译头文件）" class="headerlink" title=".pch文件（预编译头文件）"></a>.pch文件（预编译头文件）</h2><p>xcode项目中的每个文件都会自动导入这个预编译头文件，将不常改到的头文件放在此文件可以减少编译项目所需要的时间：<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#ifdef __OBJC__</span></div><div class="line">    <span class="meta">#import <span class="meta-string">&lt;Foundation/Foundation.h&gt;</span></span></div><div class="line"><span class="meta">#endif</span></div></pre></td></tr></table></figure></p>
+<h2 id="Info-plist文件"><a href="#Info-plist文件" class="headerlink" title="Info.plist文件"></a>Info.plist文件</h2><p> 属性列表文件，可以在这里修改程序的 名称、图标、版本、语言和程序支持的旋转方向等。</p>
+<h2 id="InfoPlist-strings"><a href="#InfoPlist-strings" class="headerlink" title="InfoPlist.strings"></a>InfoPlist.strings</h2><p>用于多语言。</p>
+<p>##iPhone 指令集</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ARMv8/ARM64 = iPhone 5s, iPad Air, Retina iPad Mini</div><div class="line">ARMv7s = iPhone 5, iPhone 5c, iPad 4</div><div class="line">ARMv7  = iPhone 3GS, iPhone 4, iPhone 4S, iPod 3G/4G/5G, iPad, iPad 2, iPad 3, iPad Mini  </div><div class="line">ARMv6  = iPhone, iPhone 3G, iPod 1G/2G</div></pre></td></tr></table></figure>
+<h2 id="设置Xcode指令集"><a href="#设置Xcode指令集" class="headerlink" title="设置Xcode指令集"></a>设置Xcode指令集</h2><h3 id="Architectures"><a href="#Architectures" class="headerlink" title="Architectures"></a>Architectures</h3><p>  指定工程将被编译成支持哪些指令集；支持越多，生成的指令集数据包越大。</p>
+<h3 id="Valid-Architecures"><a href="#Valid-Architecures" class="headerlink" title="Valid Architecures"></a>Valid Architecures</h3><p>  指定可能支持的指令集，该列表和Architectures列表的交集，将是Xcode最终生成的二进制包所支持的指令集，比如<br>  Architectures支持了armv7s； Valid Architectures支持了： armv7/arm64/armv7s, 那么最终只支持armv7s。</p>
+<h3 id="Build-Active-Architecture-Only"><a href="#Build-Active-Architecture-Only" class="headerlink" title="Build Active Architecture Only"></a>Build Active Architecture Only</h3><p>  设置是否编译当前使用的设备对应的arm指令集。<br>  当为YES且你成功连上一个armv7指令集的设备时，此时将忽略Architectues和Valid Architectues的设置，只生成一个armv7指令集的二进制包。<br>  否则，仍根据Arch 和Valid Arch来设定。<br>  因此，通常情况下， 该选项在Debug模式下设为YES，便于使用调试设备；Release模式下设为NO.</p>
+<h2 id="如何选择支持的指令集"><a href="#如何选择支持的指令集" class="headerlink" title="如何选择支持的指令集"></a>如何选择支持的指令集</h2><ul>
+<li>指令集都是可以向下兼容的；如支持armv7s、arm64指令集的机器上，可以跑低版本的armv7编译的程序。</li>
+<li>如果你的软件对安装包大小非常敏感，可以减少支持的指令集数目；</li>
+</ul>
+<p>##参考：</p>
+<ul>
+<li><a href="http://wangzz.github.io/blog/2014/05/09/xcodeshe-zhi-xiang-zhi-architectureshe-valid-architectures/" target="_blank" rel="external">Xcode设置项之Architectures和Valid Architectures</a> ，这篇文章对Xcode的工程设置作为了较好的解释， 感谢原作者的辛勤工作！</li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/技术/">技术</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Xcode/">Xcode</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://vin-zhou.github.com/2014/11/07/Xcode-编译设置/" data-title="Xcode 编译设置 | 没有什么能够阻挡" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/11/07/开源资料/" title="开源资料">
+  <strong>上一篇：</strong><br/>
+  <span>
+  开源资料</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/11/06/探究Objective-C-之对象初始化/"  title="探究Objective-C-之对象初始化">
+ <strong>下一篇：</strong><br/> 
+ <span>探究Objective-C-之对象初始化
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2014/11/07/Xcode-编译设置/" data-title="Xcode 编译设置" data-url="http://vin-zhou.github.com/2014/11/07/Xcode-编译设置/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#pch文件（预编译头文件）"><span class="toc-number">1.</span> <span class="toc-text">.pch文件（预编译头文件）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Info-plist文件"><span class="toc-number">2.</span> <span class="toc-text">Info.plist文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#InfoPlist-strings"><span class="toc-number">3.</span> <span class="toc-text">InfoPlist.strings</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置Xcode指令集"><span class="toc-number">4.</span> <span class="toc-text">设置Xcode指令集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Architectures"><span class="toc-number">4.1.</span> <span class="toc-text">Architectures</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Valid-Architecures"><span class="toc-number">4.2.</span> <span class="toc-text">Valid Architecures</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Build-Active-Architecture-Only"><span class="toc-number">4.3.</span> <span class="toc-text">Build Active Architecture Only</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何选择支持的指令集"><span class="toc-number">5.</span> <span class="toc-text">如何选择支持的指令集</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/想法/" title="想法">想法<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/技术/" title="技术">技术<sup>42</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>35</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Xcode/" title="Xcode">Xcode<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Swift/" title="Swift">Swift<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Git/" title="Git">Git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/app-碎片整理/" title="app, 碎片整理">app, 碎片整理<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开源/" title="开源">开源<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">8</span></li></ul>
+  </div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Mac/" style="font-size: 13.33px;">Mac</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Swift/" style="font-size: 13.33px;">Swift</a> <a href="/tags/Vim/" style="font-size: 10px;">Vim</a> <a href="/tags/Xcode/" style="font-size: 16.67px;">Xcode</a> <a href="/tags/app-碎片整理/" style="font-size: 10px;">app, 碎片整理</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/开源/" style="font-size: 10px;">开源</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Vin. <br/>
+			Life is so beautiful. Never too late to learn.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="Vin Zhou">Vin Zhou</a>
+		
+		
+		</p>
+		<p class="copyright">
+		<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1253589886'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1253589886%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));</script>
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"vin-zhou"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

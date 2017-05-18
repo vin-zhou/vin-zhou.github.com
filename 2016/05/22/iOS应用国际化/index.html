@@ -1,0 +1,545 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>iOS应用国际化 | 没有什么能够阻挡</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Vin Zhou">
+    
+
+    
+    <meta name="description" content="前言Xcode创建的iOS项目中默认包含了一个base.lproj文件夹，这就是该项目为英语环境提供的本地化文件夹。如果希望iOS项目支持更多的语言、国家环境，就必须提供更多的本地化文件夹。 添加中文国际化文件夹在 Project-&amp;gt;Build Settings-&amp;gt; Localizations里，可以看到默认的为English-Development Language。 点击『+』号，">
+<meta name="keywords" content="iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS应用国际化">
+<meta property="og:url" content="http://vin-zhou.github.com/2016/05/22/iOS应用国际化/index.html">
+<meta property="og:site_name" content="没有什么能够阻挡">
+<meta property="og:description" content="前言Xcode创建的iOS项目中默认包含了一个base.lproj文件夹，这就是该项目为英语环境提供的本地化文件夹。如果希望iOS项目支持更多的语言、国家环境，就必须提供更多的本地化文件夹。 添加中文国际化文件夹在 Project-&amp;gt;Build Settings-&amp;gt; Localizations里，可以看到默认的为English-Development Language。 点击『+』号，">
+<meta property="og:updated_time" content="2017-05-17T08:48:24.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS应用国际化">
+<meta name="twitter:description" content="前言Xcode创建的iOS项目中默认包含了一个base.lproj文件夹，这就是该项目为英语环境提供的本地化文件夹。如果希望iOS项目支持更多的语言、国家环境，就必须提供更多的本地化文件夹。 添加中文国际化文件夹在 Project-&amp;gt;Build Settings-&amp;gt; Localizations里，可以看到默认的为English-Development Language。 点击『+』号，">
+
+    
+    <link rel="alternative" href="/atom.xml" title="没有什么能够阻挡" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="没有什么能够阻挡" title="没有什么能够阻挡"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="没有什么能够阻挡">没有什么能够阻挡</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:vin-zhou.github.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/05/22/iOS应用国际化/" title="iOS应用国际化" itemprop="url">iOS应用国际化</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Vin Zhou" target="_blank" itemprop="author">Vin Zhou</a>
+		
+  <p class="article-time">
+    <time datetime="2016-05-22T08:53:55.000Z" itemprop="datePublished"> 发表于 May 22 2016</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加中文国际化文件夹"><span class="toc-number">2.</span> <span class="toc-text">添加中文国际化文件夹</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修改应用程序的显示名称"><span class="toc-number">3.</span> <span class="toc-text">修改应用程序的显示名称</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#国际化文本"><span class="toc-number">4.</span> <span class="toc-text">国际化文本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何访问到指定的资源文件？"><span class="toc-number">5.</span> <span class="toc-text">如何访问到指定的资源文件？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Xcode创建的iOS项目中默认包含了一个base.lproj文件夹，这就是该项目为英语环境提供的本地化文件夹。如果希望iOS项目支持更多的语言、国家环境，就必须提供更多的本地化文件夹。</p>
+<h2 id="添加中文国际化文件夹"><a href="#添加中文国际化文件夹" class="headerlink" title="添加中文国际化文件夹"></a>添加中文国际化文件夹</h2><p>在 Project-&gt;Build Settings-&gt; Localizations里，可以看到默认的为English-Development Language。 点击『+』号，可以添加Chinese(Simplified),默认为Main.storyboad和LaunchScreen.storyboard两个文件添加中文版本文件。点击’Finish’就可以看到新增加了一个 zh-Hans.lproj文件夹。</p>
+<h2 id="修改应用程序的显示名称"><a href="#修改应用程序的显示名称" class="headerlink" title="修改应用程序的显示名称"></a>修改应用程序的显示名称</h2><p>应用程序的显示名称默认为PRODUCT_NAME变量的值，即『产品名』。可以在info.plist里添加 CFBundleDisplayName 中文名 修改显示的应用的显示名称</p>
+<h2 id="国际化文本"><a href="#国际化文本" class="headerlink" title="国际化文本"></a>国际化文本</h2><p>国际化文本的过程本质上就是根据指定的language，找到对应存放国际化字符串的资源文件，然后在该文件中查找指定key所对应的字符串。<br>那么如何获得指定的language?</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 查看当前的 language</span></div><div class="line"><span class="built_in">NSArray</span>* langArray = [[<span class="built_in">NSUserDefaults</span> standardUserDefaults] arrayForKey:<span class="string">@"AppleLanguages"</span>];</div><div class="line"><span class="built_in">NSString</span>* currentLanguage = langArray[<span class="number">0</span>];</div></pre></td></tr></table></figure>
+<p>用户在系统Settings里选择的首选语言，可以通过”AppleLanguages”在userDeaults中获得。如果我们不在代码里对这个值修改，系统默认就是使用这个language的。<br>因此，我们可以在代码这样修改：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 设置当前的 language</span></div><div class="line"> <span class="built_in">NSArray</span>* newLangArray = [<span class="built_in">NSArray</span> arrayWithObjects:<span class="string">@"zh-Hans"</span>, <span class="literal">nil</span>];</div><div class="line"> [[<span class="built_in">NSUserDefaults</span> standardUserDefaults] setObject:newLangArray forKey:<span class="string">@"AppleLanguages"</span>];</div><div class="line"> [[<span class="built_in">NSUserDefaults</span> standardUserDefaults] synchronize];</div></pre></td></tr></table></figure>
+<p>这样就不用手动在Settings里设置了。<br>当然了，我们也可以自己定义一个如 ‘appLanguage’这样的key,来存放我们希望使用的language，以便在需要用的时候再从userDefaults中读取。这需要我们自己来维护。</p>
+<h2 id="如何访问到指定的资源文件？"><a href="#如何访问到指定的资源文件？" class="headerlink" title="如何访问到指定的资源文件？"></a>如何访问到指定的资源文件？</h2><p>在NSBundle.h中，系统提供了4个供获取国际化字符串的宏定义:</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#define NSLocalizedString(key, comment) \</span></div><div class="line">	    [<span class="built_in">NSBundle</span>.mainBundle localizedStringForKey:(key) value:<span class="string">@""</span> table:<span class="literal">nil</span>]</div><div class="line"><span class="meta">#define NSLocalizedStringFromTable(key, tbl, comment) \</span></div><div class="line">	    [<span class="built_in">NSBundle</span>.mainBundle localizedStringForKey:(key) value:<span class="string">@""</span> table:(tbl)]</div><div class="line"><span class="meta">#define NSLocalizedStringFromTableInBundle(key, tbl, bundle, comment) \</span></div><div class="line">	    [bundle localizedStringForKey:(key) value:<span class="string">@""</span> table:(tbl)]</div><div class="line"><span class="meta">#define NSLocalizedStringWithDefaultValue(key, tbl, bundle, val, comment) \</span></div><div class="line">	    [bundle localizedStringForKey:(key) value:(val) table:(tbl)]</div></pre></td></tr></table></figure>
+<p>如果我们使用了AppleLanguages里保存的language信息，这四个方法会自动在bundle里查找对应 language.lproj文件夹。方法一中没有指定table,因此会自动查找文件夹下名为<strong>Localizable.strings</strong>的文件；方法二可以指定任意其他的文件名，如iPhonstring.strings；方法三、四可以自己指定bundel，方法四还可以指定默认值。</p>
+<p>如果使用方法一，需要我们在如 zh-Hans.lproj 文件夹添加中添加 名为 Localizable.strings 的空白文件，然后添加国际化字符串的key-value值， 如 <code>&quot;book&quot; = &quot;书&quot;</code>;。</p>
+<p>如果使用方法四，示例：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSString</span> *finalBundlePath = [[<span class="built_in">NSBundle</span> mainBundle] pathForResource:<span class="string">@"FinalBundle"</span> ofType:<span class="string">@"bundle"</span>];</div><div class="line"><span class="built_in">NSBundle</span> *finalBundle = [<span class="built_in">NSBundle</span> bundleWithPath:finalBundlePath]; <span class="comment">// 组装bundle</span></div><div class="line"><span class="built_in">NSString</span> *ok = <span class="built_in">NSLocalizedStringWithDefaultValue</span>(<span class="string">@"OK"</span>, <span class="string">@"IPhoneStrings"</span>, finalBundle, <span class="string">@"OK"</span>, <span class="string">""</span>); <span class="comment">// 在 FinalBundle 文件夹里的*.lproj子文件夹的 IPhonStrings.strings 文件里查找 key 为 @"OK" 字符串。</span></div></pre></td></tr></table></figure>
+<p>如果我们使用自己的key来记录当前language信息，那么需要自己组装指定 *.lproj的位置，构造bundle,示例</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSString</span>* bundlePath = [[<span class="built_in">NSBundle</span> mainBundle] pathForResource:[<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%@"</span>,[[<span class="built_in">NSUserDefaults</span> standardUserDefaults] objectForKey:<span class="string">@"appLanguage"</span>]] ofType:<span class="string">@"lproj"</span>]; <span class="comment">// 自己找到诸如 zh-Hans.lproj 的文件夹</span></div><div class="line"><span class="built_in">NSBundle</span>* bundle = [<span class="built_in">NSBundle</span> bundleWithPath:];</div><div class="line"><span class="built_in">NSString</span>* str = [bundle localizedStringForKey:<span class="string">@"OK"</span> value:<span class="literal">nil</span> table:<span class="string">@"IPhoneStrings"</span>]; <span class="comment">//查找IPhoneStrings.strings文件里的@"OK"的字符串</span></div></pre></td></tr></table></figure>
+<p>可以用一个宏定义来指定整个过程，</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#define Localized(key)  [[NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@<span class="meta-string">"%@"</span>,[[NSUserDefaults standardUserDefaults] objectForKey:@<span class="meta-string">"appLanguage"</span>]] ofType:@<span class="meta-string">"lproj"</span>]] localizedStringForKey:(key) value:nil table:@<span class="meta-string">"IPhoneStrings"</span>]</span></div></pre></td></tr></table></figure>
+<p>使用时，直接 NSString* str = Localized(@”OK”); 即可。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.jianshu.com/p/c832eff9aca5" target="_blank" rel="external">API之UIGestureRecognizer及自定义手势</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/技术/">技术</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://vin-zhou.github.com/2016/05/22/iOS应用国际化/" data-title="iOS应用国际化 | 没有什么能够阻挡" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/07/17/iOS设计模式札记1-基础模式/" title="iOS设计模式札记1-基础模式">
+  <strong>上一篇：</strong><br/>
+  <span>
+  iOS设计模式札记1-基础模式</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/01/26/探究Swift/"  title="探究Swift">
+ <strong>下一篇：</strong><br/> 
+ <span>探究Swift
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/05/22/iOS应用国际化/" data-title="iOS应用国际化" data-url="http://vin-zhou.github.com/2016/05/22/iOS应用国际化/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加中文国际化文件夹"><span class="toc-number">2.</span> <span class="toc-text">添加中文国际化文件夹</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修改应用程序的显示名称"><span class="toc-number">3.</span> <span class="toc-text">修改应用程序的显示名称</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#国际化文本"><span class="toc-number">4.</span> <span class="toc-text">国际化文本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何访问到指定的资源文件？"><span class="toc-number">5.</span> <span class="toc-text">如何访问到指定的资源文件？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/想法/" title="想法">想法<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/技术/" title="技术">技术<sup>42</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>35</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Xcode/" title="Xcode">Xcode<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Swift/" title="Swift">Swift<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Git/" title="Git">Git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/app-碎片整理/" title="app, 碎片整理">app, 碎片整理<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开源/" title="开源">开源<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">8</span></li></ul>
+  </div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Hexo/" style="font-size: 16.67px;">Hexo</a> <a href="/tags/Mac/" style="font-size: 13.33px;">Mac</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Swift/" style="font-size: 13.33px;">Swift</a> <a href="/tags/Vim/" style="font-size: 10px;">Vim</a> <a href="/tags/Xcode/" style="font-size: 16.67px;">Xcode</a> <a href="/tags/app-碎片整理/" style="font-size: 10px;">app, 碎片整理</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/开源/" style="font-size: 10px;">开源</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Vin. <br/>
+			Life is so beautiful. Never too late to learn.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="Vin Zhou">Vin Zhou</a>
+		
+		
+		</p>
+		<p class="copyright">
+		<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1253589886'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1253589886%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));</script>
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"vin-zhou"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
