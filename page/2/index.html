@@ -78,6 +78,71 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
+    <a href="/2016/08/17/数据存储札记/" title="数据存储札记" itemprop="url">
+  
+    <h1 itemprop="name">数据存储札记</h1>
+    
+     
+           <p itemprop="description" >前言本文对iOS中数据存储方式做一总结，涉及到应用程序沙盒（Sandbox）和5种常用的数据存储方式，最后介绍了主流的第三方框架FMDB。
+应用沙盒
+每个iOS应用都有自己的应用沙盒，应用沙盒就是文件系统目录，与其他文件系统隔离。应用必须待在自己的沙盒里，其他应用不能访问该沙盒。</p>
+        
+    
+    <time datetime="2016-08-17T13:53:55.000Z" itemprop="datePublished">Aug 17 2016</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2016/07/20/iOS设计模式札记3-通过解耦来变得更强大的模式/" title="iOS设计模式札记3-通过解耦来变得更强大的模式" itemprop="url">
+  
+    <h1 itemprop="name">iOS设计模式札记3-通过解耦来变得更强大的模式</h1>
+    
+     
+           <p itemprop="description" >通过解耦来变得更强大的模式单例 - manager通知 - Notification代理/委托 - delegate观察者模式 - KVO - Key value observingKVO的使用步骤非常简单：
+
+为被监听对象（通常是数据模型）注册监听器；
+重写监听器（通常是视图模</p>
+        
+    
+    <time datetime="2016-07-20T12:53:55.000Z" itemprop="datePublished">Jul 20 2016</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2016/07/18/iOS设计模式札记2-主要用于隐藏复杂性的模式/" title="iOS设计模式札记2-主要用于隐藏复杂性的模式" itemprop="url">
+  
+    <h1 itemprop="name">iOS设计模式札记2-主要用于隐藏复杂性的模式</h1>
+    
+     
+           <p itemprop="description" >主要用于隐藏复杂性的模式外观 - Facade代理和转发包类簇管理者控制器模式应用的实用工具模式应用的实用工具</p>
+        
+    
+    <time datetime="2016-07-18T12:53:55.000Z" itemprop="datePublished">Jul 18 2016</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
     <a href="/2016/07/17/iOS设计模式札记1-基础模式/" title="iOS设计模式札记1-基础模式" itemprop="url">
   
     <h1 itemprop="name">iOS设计模式札记1-基础模式</h1>
@@ -153,12 +218,16 @@ println(“hello, world”) 每行语句末尾不需要加分号
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2015/12/02/探究Objective-C-之响应者链与手势处理器/" title="探究Objective-C-之响应者链与手势处理器" itemprop="url">
+    <a href="/2015/12/02/同一台电脑多SSH Key管理/" title="同一台电脑多SSH Key管理" itemprop="url">
   
-    <h1 itemprop="name">探究Objective-C-之响应者链与手势处理器</h1>
+    <h1 itemprop="name">同一台电脑多SSH Key管理</h1>
     
      
-           <p itemprop="description" >UIResponder传递路径UIViewController和UIView都继承了UIResponder，因此他们及其子类都可以作为事件的响应者。事件响应者链的处理次序是： First Responder(用户触摸的view控件本身) -&amp;gt; First Responder</p>
+           <p itemprop="description" >本文参考自：http://yijiebuyi.com/blog/f18d38eb7cfee860c117d629fdb16faf.html生成不同的Key
+
+执行如下命令生成一个key, 并指定其名字为 id_ras_aaa （否则为默认的id_ras，并会覆盖之前的值）
+
+12</p>
         
     
     <time datetime="2015-12-02T00:53:55.000Z" itemprop="datePublished">Dec 2 2015</time>
@@ -173,16 +242,12 @@ println(“hello, world”) 每行语句末尾不需要加分号
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2015/12/02/同一台电脑多SSH Key管理/" title="同一台电脑多SSH Key管理" itemprop="url">
+    <a href="/2015/12/02/探究Objective-C-之响应者链与手势处理器/" title="探究Objective-C-之响应者链与手势处理器" itemprop="url">
   
-    <h1 itemprop="name">同一台电脑多SSH Key管理</h1>
+    <h1 itemprop="name">探究Objective-C-之响应者链与手势处理器</h1>
     
      
-           <p itemprop="description" >本文参考自：http://yijiebuyi.com/blog/f18d38eb7cfee860c117d629fdb16faf.html生成不同的Key
-
-执行如下命令生成一个key, 并指定其名字为 id_ras_aaa （否则为默认的id_ras，并会覆盖之前的值）
-
-12</p>
+           <p itemprop="description" >UIResponder传递路径UIViewController和UIView都继承了UIResponder，因此他们及其子类都可以作为事件的响应者。事件响应者链的处理次序是： First Responder(用户触摸的view控件本身) -&amp;gt; First Responder</p>
         
     
     <time datetime="2015-12-02T00:53:55.000Z" itemprop="datePublished">Dec 2 2015</time>
@@ -227,96 +292,6 @@ println(“hello, world”) 每行语句末尾不需要加分号
         
     
     <time datetime="2015-08-17T06:57:18.000Z" itemprop="datePublished">Aug 17 2015</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2015/08/15/并发编程札记/" title="并发编程札记" itemprop="url">
-  
-    <h1 itemprop="name">并发编程札记</h1>
-    
-     
-           <p itemprop="description" >重点参考自 关于iOS多线程，你看我就够了。 这里只对关键的点做一总结。
-iOS提供4种多线程方式：Pthreads\NSThread\Grand Central Dispatch(GCD)\NSOperation
-其封装性、OO性依次由低到高。
-NSThread线程的几种状态：</p>
-        
-    
-    <time datetime="2015-08-15T03:13:45.000Z" itemprop="datePublished">Aug 15 2015</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2015/03/25/Vim-使用手册/" title="Vim 使用手册" itemprop="url">
-  
-    <h1 itemprop="name">Vim 使用手册</h1>
-    
-     
-           <p itemprop="description" >##引言
-本文是对文章程序猿系列：简明Vim练级攻略的整理，感谢原作者的辛勤工作。
-##第一级- 存活
-
-
-
-命令
-说明
-
-
-
-
-i
-Insert模式，按ESC回到Normal模式
-
-
-x
-删当前光标所在的一个字符
-
-
-dd
-删除当前行，并把删除的行存到剪贴板里
-
-
-p
-粘贴剪贴</p>
-        
-    
-    <time datetime="2015-03-25T09:03:03.000Z" itemprop="datePublished">Mar 25 2015</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2015/03/18/Objective-C-拾遗/" title="Objective C 拾遗" itemprop="url">
-  
-    <h1 itemprop="name">Objective C 拾遗</h1>
-    
-     
-           <p itemprop="description" >本文补充了一些在使用Object C时见到的狗皮膏药，主要是OOAP方面。
-public private protected 方法的实现由于Object C不支持对方法使用访问修饰符：
-You can neither declare a method protected or p</p>
-        
-    
-    <time datetime="2015-03-18T02:15:16.000Z" itemprop="datePublished">Mar 18 2015</time>
   </a>
 </section>
 
@@ -406,7 +381,7 @@ You can neither declare a method protected or p</p>
   
   <div class="archiveslist">
     <p class="asidetitle"><a href="/archives">归档</a></p>
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">8</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">8</span></li></ul>
   </div>
 
 

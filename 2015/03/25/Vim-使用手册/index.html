@@ -11,17 +11,17 @@
     
 
     
-    <meta name="description" content="##引言 本文是对文章程序猿系列：简明Vim练级攻略的整理，感谢原作者的辛勤工作。 ##第一级- 存活    命令 说明     i Insert模式，按ESC回到Normal模式   x 删当前光标所在的一个字符   dd 删除当前行，并把删除的行存到剪贴板里   p 粘贴剪贴板   :wq 存盘 + 退出 (:w 存盘, :q 退出)   （陈皓注：:w 后可以跟文件名）   hjkl 移动光">
+    <meta name="description" content="引言本文是对文章程序猿系列：简明Vim练级攻略的整理，感谢原作者的辛勤工作。 第一级- 存活   命令 说明      i Insert模式，按ESC回到Normal模式     x 删当前光标所在的一个字符    dd 删除当前行，并把删除的行存到剪贴板里   p 粘贴剪贴板   :wq 存盘 + 退出 (:w 存盘, :q 退出)   （陈皓注：:w 后可以跟文件名）   hjkl 移动光标">
 <meta name="keywords" content="Vim">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Vim 使用手册">
 <meta property="og:url" content="http://vin-zhou.github.com/2015/03/25/Vim-使用手册/index.html">
 <meta property="og:site_name" content="没有什么能够阻挡">
-<meta property="og:description" content="##引言 本文是对文章程序猿系列：简明Vim练级攻略的整理，感谢原作者的辛勤工作。 ##第一级- 存活    命令 说明     i Insert模式，按ESC回到Normal模式   x 删当前光标所在的一个字符   dd 删除当前行，并把删除的行存到剪贴板里   p 粘贴剪贴板   :wq 存盘 + 退出 (:w 存盘, :q 退出)   （陈皓注：:w 后可以跟文件名）   hjkl 移动光">
-<meta property="og:updated_time" content="2016-12-15T12:30:28.000Z">
+<meta property="og:description" content="引言本文是对文章程序猿系列：简明Vim练级攻略的整理，感谢原作者的辛勤工作。 第一级- 存活   命令 说明      i Insert模式，按ESC回到Normal模式     x 删当前光标所在的一个字符    dd 删除当前行，并把删除的行存到剪贴板里   p 粘贴剪贴板   :wq 存盘 + 退出 (:w 存盘, :q 退出)   （陈皓注：:w 后可以跟文件名）   hjkl 移动光标">
+<meta property="og:updated_time" content="2017-05-25T06:05:46.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Vim 使用手册">
-<meta name="twitter:description" content="##引言 本文是对文章程序猿系列：简明Vim练级攻略的整理，感谢原作者的辛勤工作。 ##第一级- 存活    命令 说明     i Insert模式，按ESC回到Normal模式   x 删当前光标所在的一个字符   dd 删除当前行，并把删除的行存到剪贴板里   p 粘贴剪贴板   :wq 存盘 + 退出 (:w 存盘, :q 退出)   （陈皓注：:w 后可以跟文件名）   hjkl 移动光">
+<meta name="twitter:description" content="引言本文是对文章程序猿系列：简明Vim练级攻略的整理，感谢原作者的辛勤工作。 第一级- 存活   命令 说明      i Insert模式，按ESC回到Normal模式     x 删当前光标所在的一个字符    dd 删除当前行，并把删除的行存到剪贴板里   p 粘贴剪贴板   :wq 存盘 + 退出 (:w 存盘, :q 退出)   （陈皓注：:w 后可以跟文件名）   hjkl 移动光标">
 
     
     <link rel="alternative" href="/atom.xml" title="没有什么能够阻挡" type="application/atom+xml">
@@ -97,28 +97,26 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#选择"><span class="toc-number">1.</span> <span class="toc-text">选择</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#匹配光标当前所在的单词，移动光标到上一个匹配单词"><span class="toc-number"></span> <span class="toc-text">| 匹配光标当前所在的单词，移动光标到上一个匹配单词</span></a>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第一级-存活"><span class="toc-number">2.</span> <span class="toc-text">第一级- 存活</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第二级-感觉良好"><span class="toc-number">3.</span> <span class="toc-text">第二级- 感觉良好</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#插入模式"><span class="toc-number">3.1.</span> <span class="toc-text">插入模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#移动光标"><span class="toc-number">3.2.</span> <span class="toc-text">移动光标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#选择"><span class="toc-number">3.3.</span> <span class="toc-text">选择</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#拷贝粘贴"><span class="toc-number">3.4.</span> <span class="toc-text">拷贝粘贴</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Undo-Redo"><span class="toc-number">3.5.</span> <span class="toc-text">Undo/Redo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#更改字符"><span class="toc-number">3.6.</span> <span class="toc-text">更改字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#打开-保存-退出-改变文件-Buffer"><span class="toc-number">3.7.</span> <span class="toc-text">打开/保存/退出/改变文件(Buffer)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第三级-更好，更强，更快"><span class="toc-number">4.</span> <span class="toc-text">第三级- 更好，更强，更快</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#更好"><span class="toc-number">4.1.</span> <span class="toc-text">更好</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#更强"><span class="toc-number">4.2.</span> <span class="toc-text">更强</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#更快"><span class="toc-number">4.3.</span> <span class="toc-text">更快</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#比如删除"><span class="toc-number">4.3.1.</span> <span class="toc-text">比如删除</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第四级-Vim-超能力"><span class="toc-number">5.</span> <span class="toc-text">第四级- Vim 超能力</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
 		
 		</div>
 		
-		<p>##引言</p>
-<p>本文是对文章<a href="http://www.acfun.tv/v/ac421874" target="_blank" rel="external">程序猿系列：简明Vim练级攻略</a>的整理，感谢原作者的辛勤工作。</p>
-<p>##第一级- 存活</p>
-<table>
+		<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>本文是对文章<a href="http://www.acfun.tv/v/ac421874" target="_blank" rel="external">程序猿系列：简明Vim练级攻略</a>的整理，感谢原作者的辛勤工作。</p>
+<h2 id="第一级-存活"><a href="#第一级-存活" class="headerlink" title="第一级- 存活"></a>第一级- 存活</h2><table>
 <thead>
 <tr>
 <th>命令</th>
-<th>说明</th>
+<th>说明 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>i</td>
-<td>Insert模式，按ESC回到Normal模式</td>
+<td>Insert模式，按ESC回到Normal模式 </td>
 </tr>
 <tr>
-<td>x</td>
-<td>删当前光标所在的一个字符</td>
+<td> x</td>
+<td>删当前光标所在的一个字符 </td>
 </tr>
 <tr>
 <td>dd</td>
@@ -139,10 +137,41 @@
 </tbody>
 </table>
 <p>VIM的Normal模式下，所有的键就是功能键了</p>
-<p>##第二级- 感觉良好</p>
-<p>###插入模式<br>命令 |  说明<br>—— |——-<br>i | 进入Normal模式，1    在光标后插入<br>shift + i | 在行首（非空非TAP）处插入<br>a | 在光标后插入<br>A | 在光标所在行末尾插入<br>o  | 在当前行后插入一个新行<br>O | 在当前行前插入一个新行</p>
-<p>###移动光标</p>
-<table>
+<h2 id="第二级-感觉良好"><a href="#第二级-感觉良好" class="headerlink" title="第二级- 感觉良好"></a>第二级- 感觉良好</h2><h3 id="插入模式"><a href="#插入模式" class="headerlink" title="插入模式"></a>插入模式</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>i</td>
+<td>进入Normal模式，1    在光标后插入</td>
+</tr>
+<tr>
+<td>shift + i</td>
+<td>在行首（非空非TAP）处插入</td>
+</tr>
+<tr>
+<td>a</td>
+<td>在光标后插入</td>
+</tr>
+<tr>
+<td>A</td>
+<td>在光标所在行末尾插入</td>
+</tr>
+<tr>
+<td>o</td>
+<td>在当前行后插入一个新行</td>
+</tr>
+<tr>
+<td>O</td>
+<td>在当前行前插入一个新行</td>
+</tr>
+</tbody>
+</table>
+<h3 id="移动光标"><a href="#移动光标" class="headerlink" title="移动光标"></a>移动光标</h3><table>
 <thead>
 <tr>
 <th>命令</th>
@@ -192,9 +221,21 @@
 </tr>
 </tbody>
 </table>
-<h3 id="选择"><a href="#选择" class="headerlink" title="选择"></a>选择</h3><p>V | 选择一行</p>
-<p>###拷贝粘贴 </p>
-<p>（陈皓注：p/P都可以，p是表示在当前位置之后，P表示在当前位置之前）</p>
+<h3 id="选择"><a href="#选择" class="headerlink" title="选择"></a>选择</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>V</td>
+<td>选择一行</td>
+</tr>
+</tbody>
+</table>
+<h3 id="拷贝粘贴"><a href="#拷贝粘贴" class="headerlink" title="拷贝粘贴"></a>拷贝粘贴</h3><p>（陈皓注：p/P都可以，p是表示在当前位置之后，P表示在当前位置之前）</p>
 <table>
 <thead>
 <tr>
@@ -213,24 +254,161 @@
 </tr>
 </tbody>
 </table>
-<p>###Undo/Redo<br>命令 |  说明<br>—— |——-<br>u |    undo<br>Ctr+r | redo</p>
-<p>###更改字符<br>命令 |  说明<br>—— |——-<br>rx |    x为当前光标下要更改成的任意字符<br>~ | 更改当前光标下的字符的大小写</p>
-<p>###打开/保存/退出/改变文件(Buffer)<br>命令 |  说明<br>—— |——-<br>:e path/to/file  |    打开一个文件<br>:w | 存盘<br>:saveas path/to/file | 另存为 path/to/file<br>:x， ZZ 或 :wq | 保存并退出 (:x 表示仅在需要时保存，ZZ不需要输入冒号并回车)<br>:q! | 退出不保存<br>:qa! | 强行退出所有的正在编辑的文件，就算别的文件有更改。<br>:bn 和 :bp | 你可以同时打开很多文件，使用这两个命令来切换下一个或上一个文件。（陈皓注：我喜欢使用:n到下一个文件）</p>
-<p>##第三级- 更好，更强，更快</p>
-<p>###更好<br>命令 |  说明<br>—— |——-<br>. | (小数点) 可以重复上一次的命令<br>N <em>[command]</em> | 重复某个命令N次<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">下面是一个示例，找开一个文件你可以试试下面的命令：</div><div class="line">2dd → 删除2行</div><div class="line">3p → 粘贴文本3次</div><div class="line">100idesu [ESC] → 会写下 “desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu “</div><div class="line">. → 重复上一个命令—— 100 “desu “.</div><div class="line">3. → 重复 3 次 “desu” (注意：不是 300，你看，VIM多聪明啊).</div></pre></td></tr></table></figure></p>
-<p>###更强<br>命令 |  说明<br>—— |——-<br>% | 匹配括号移动，包括 (, {, [. （陈皓注：你需要把光标先移到括号上）</p>
-<ul>
-<li>| 匹配光标当前所在的单词，移动光标到下一个匹配单词<h1 id="匹配光标当前所在的单词，移动光标到上一个匹配单词"><a href="#匹配光标当前所在的单词，移动光标到上一个匹配单词" class="headerlink" title="| 匹配光标当前所在的单词，移动光标到上一个匹配单词"></a>| 匹配光标当前所在的单词，移动光标到上一个匹配单词</h1>（Ctrl + f） | 光标向下翻一页(Forward)<br>（Ctrl + b） | 光标向上翻一页(Forward)<br>（Ctrl + d） | 光标向下翻半页(Forward)<br>（Ctrl + u） | 光标向上翻半页(Upward)<br>（Ctrl + o） | Insert模式切换为Normal模式<br>zz | 将光标所在位置屏幕居中<br>zt | 将光标所在位置屏幕居顶部（Top）<br>zb | 将光标所在位置屏幕居底部（Bottom）</li>
-</ul>
-<p>###更快<br>你一定要记住光标的移动，因为很多命令都可以和这些移动光标的命令连动。很多命令都可以如下来干：</p>
+<h3 id="Undo-Redo"><a href="#Undo-Redo" class="headerlink" title="Undo/Redo"></a>Undo/Redo</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>u</td>
+<td>undo</td>
+</tr>
+<tr>
+<td>Ctr+r</td>
+<td>redo</td>
+</tr>
+</tbody>
+</table>
+<h3 id="更改字符"><a href="#更改字符" class="headerlink" title="更改字符"></a>更改字符</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>rx</td>
+<td>x为当前光标下要更改成的任意字符</td>
+</tr>
+<tr>
+<td>~</td>
+<td>更改当前光标下的字符的大小写</td>
+</tr>
+</tbody>
+</table>
+<h3 id="打开-保存-退出-改变文件-Buffer"><a href="#打开-保存-退出-改变文件-Buffer" class="headerlink" title="打开/保存/退出/改变文件(Buffer)"></a>打开/保存/退出/改变文件(Buffer)</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>:e path/to/file</td>
+<td>打开一个文件</td>
+</tr>
+<tr>
+<td>:w</td>
+<td>存盘</td>
+</tr>
+<tr>
+<td>:saveas path/to/file</td>
+<td>另存为 path/to/file</td>
+</tr>
+<tr>
+<td>:x， ZZ 或 :wq</td>
+<td>保存并退出 (:x 表示仅在需要时保存，ZZ不需要输入冒号并回车)</td>
+</tr>
+<tr>
+<td>:q!</td>
+<td>退出不保存 </td>
+</tr>
+<tr>
+<td>:qa!</td>
+<td>强行退出所有的正在编辑的文件，就算别的文件有更改。</td>
+</tr>
+<tr>
+<td>:bn 和 :bp</td>
+<td>你可以同时打开很多文件，使用这两个命令来切换下一个或上一个文件。（陈皓注：我喜欢使用:n到下一个文件）</td>
+</tr>
+</tbody>
+</table>
+<h2 id="第三级-更好，更强，更快"><a href="#第三级-更好，更强，更快" class="headerlink" title="第三级- 更好，更强，更快"></a>第三级- 更好，更强，更快</h2><h3 id="更好"><a href="#更好" class="headerlink" title="更好"></a>更好</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>.</td>
+<td>(小数点) 可以重复上一次的命令</td>
+</tr>
+<tr>
+<td>N <em>[command]</em></td>
+<td>重复某个命令N次</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">下面是一个示例，找开一个文件你可以试试下面的命令：</div><div class="line">2dd → 删除2行</div><div class="line">3p → 粘贴文本3次</div><div class="line">100idesu [ESC] → 会写下 “desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu “</div><div class="line">. → 重复上一个命令—— 100 “desu “.</div><div class="line">3. → 重复 3 次 “desu” (注意：不是 300，你看，VIM多聪明啊).</div></pre></td></tr></table></figure>
+<h3 id="更强"><a href="#更强" class="headerlink" title="更强"></a>更强</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>%</td>
+<td>匹配括号移动，包括 (, {, [. （陈皓注：你需要把光标先移到括号上）</td>
+</tr>
+<tr>
+<td>*</td>
+<td>匹配光标当前所在的单词，移动光标到下一个匹配单词</td>
+</tr>
+<tr>
+<td>#</td>
+<td>匹配光标当前所在的单词，移动光标到上一个匹配单词</td>
+</tr>
+<tr>
+<td>（Ctrl + f）</td>
+<td>光标向下翻一页(Forward)</td>
+</tr>
+<tr>
+<td>（Ctrl + b）</td>
+<td>光标向上翻一页(Forward)</td>
+</tr>
+<tr>
+<td>（Ctrl + d）</td>
+<td>光标向下翻半页(Forward)</td>
+</tr>
+<tr>
+<td>（Ctrl + u）</td>
+<td>光标向上翻半页(Upward)</td>
+</tr>
+<tr>
+<td>（Ctrl + o）</td>
+<td>Insert模式切换为Normal模式</td>
+</tr>
+<tr>
+<td>zz</td>
+<td>将光标所在位置屏幕居中</td>
+</tr>
+<tr>
+<td>zt</td>
+<td>将光标所在位置屏幕居顶部（Top）</td>
+</tr>
+<tr>
+<td>zb</td>
+<td>将光标所在位置屏幕居底部（Bottom）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="更快"><a href="#更快" class="headerlink" title="更快"></a>更快</h3><p>你一定要记住光标的移动，因为很多命令都可以和这些移动光标的命令连动。很多命令都可以如下来干：</p>
 <p>（start position）（command）（end position）</p>
 <p>例如 0y$ 命令意味着：</p>
 <p>0 → 先到行头<br>y → 从这里开始拷贝<br>$ → 拷贝到本行最后一个字符<br>你可可以输入 ye，从当前位置拷贝到本单词的最后一个字符。</p>
 <p>你也可以输入 y2/foo 来拷贝2个 “foo” 之间的字符串。</p>
 <p>还有很多时间并不一定你就一定要按y才会拷贝，下面的命令也会被拷贝：</p>
 <p>d (删除 )<br>v (可视化的选择)<br>gU (变大写)<br>gu (变小写)<br>等等<br>（陈皓注：可视化选择是一个很有意思的命令，你可以先按v，然后移动光标，你就会看到文本被选择，然后，你可能d，也可y，也可以变大写等）</p>
-<p>####比如删除</p>
-<table>
+<h4 id="比如删除"><a href="#比如删除" class="headerlink" title="比如删除"></a>比如删除</h4><table>
 <thead>
 <tr>
 <th>命令</th>
@@ -288,12 +466,10 @@
 </tr>
 </tbody>
 </table>
-<p>##第四级- Vim 超能力</p>
-<p>块操作: （C-v）<br>块操作，典型的操作： 0 （C-v） （C-d） I– [ESC]</p>
+<h2 id="第四级-Vim-超能力"><a href="#第四级-Vim-超能力" class="headerlink" title="第四级- Vim 超能力"></a>第四级- Vim 超能力</h2><p>块操作: （C-v）<br>块操作，典型的操作： 0 （C-v） （C-d） I– [ESC]</p>
 <p>^ → 到行头<br>（C-v） → 开始块操作<br>（C-d） → 向下移动 (你也可以使用hjkl来移动光标，或是使用%，或是别的)<br>I– [ESC] → I是插入，插入“–”，按ESC键来为每一行生效。</p>
 <p>由于涉及比较多的图片和GIF动画，请参考原文。</p>
-<p>##参考</p>
-<p>*<a href="http://www.acfun.tv/v/ac421874" target="_blank" rel="external">程序猿系列：简明Vim练级攻略</a></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>*<a href="http://www.acfun.tv/v/ac421874" target="_blank" rel="external">程序猿系列：简明Vim练级攻略</a></p>
 <p>*<a href="http://lxs647.iteye.com/blog/1245948" target="_blank" rel="external">Vi/Vim 删除及其他指令</a></p>
   
 	</div>
@@ -361,7 +537,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#选择"><span class="toc-number">1.</span> <span class="toc-text">选择</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#匹配光标当前所在的单词，移动光标到上一个匹配单词"><span class="toc-number"></span> <span class="toc-text">| 匹配光标当前所在的单词，移动光标到上一个匹配单词</span></a>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第一级-存活"><span class="toc-number">2.</span> <span class="toc-text">第一级- 存活</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第二级-感觉良好"><span class="toc-number">3.</span> <span class="toc-text">第二级- 感觉良好</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#插入模式"><span class="toc-number">3.1.</span> <span class="toc-text">插入模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#移动光标"><span class="toc-number">3.2.</span> <span class="toc-text">移动光标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#选择"><span class="toc-number">3.3.</span> <span class="toc-text">选择</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#拷贝粘贴"><span class="toc-number">3.4.</span> <span class="toc-text">拷贝粘贴</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Undo-Redo"><span class="toc-number">3.5.</span> <span class="toc-text">Undo/Redo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#更改字符"><span class="toc-number">3.6.</span> <span class="toc-text">更改字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#打开-保存-退出-改变文件-Buffer"><span class="toc-number">3.7.</span> <span class="toc-text">打开/保存/退出/改变文件(Buffer)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第三级-更好，更强，更快"><span class="toc-number">4.</span> <span class="toc-text">第三级- 更好，更强，更快</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#更好"><span class="toc-number">4.1.</span> <span class="toc-text">更好</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#更强"><span class="toc-number">4.2.</span> <span class="toc-text">更强</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#更快"><span class="toc-number">4.3.</span> <span class="toc-text">更快</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#比如删除"><span class="toc-number">4.3.1.</span> <span class="toc-text">比如删除</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第四级-Vim-超能力"><span class="toc-number">5.</span> <span class="toc-text">第四级- Vim 超能力</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
  
   </div>
 
@@ -438,7 +614,7 @@
   
   <div class="archiveslist">
     <p class="asidetitle"><a href="/archives">归档</a></p>
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">8</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">8</span></li></ul>
   </div>
 
 

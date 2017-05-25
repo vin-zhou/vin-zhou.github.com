@@ -4,24 +4,23 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>iOS应用国际化 | 没有什么能够阻挡</title>
+    <title>Charles的HTTPS抓包方法及原理分析 | 没有什么能够阻挡</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Vin Zhou">
     
 
     
-    <meta name="description" content="前言Xcode创建的iOS项目中默认包含了一个base.lproj文件夹，这就是该项目为英语环境提供的本地化文件夹。如果希望iOS项目支持更多的语言、国家环境，就必须提供更多的本地化文件夹。 添加中文国际化文件夹在 Project-&amp;gt;Build Settings-&amp;gt; Localizations里，可以看到默认的为English-Development Language。 点击『+』号，">
-<meta name="keywords" content="iOS">
+    <meta name="description" content="Charles的HTTPS抓包方法及原理分析">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iOS应用国际化">
-<meta property="og:url" content="http://vin-zhou.github.com/2016/05/22/iOS应用国际化/index.html">
+<meta property="og:title" content="Charles的HTTPS抓包方法及原理分析">
+<meta property="og:url" content="http://vin-zhou.github.com/2017/05/20/Charles的HTTPS抓包方法及原理分析/index.html">
 <meta property="og:site_name" content="没有什么能够阻挡">
-<meta property="og:description" content="前言Xcode创建的iOS项目中默认包含了一个base.lproj文件夹，这就是该项目为英语环境提供的本地化文件夹。如果希望iOS项目支持更多的语言、国家环境，就必须提供更多的本地化文件夹。 添加中文国际化文件夹在 Project-&amp;gt;Build Settings-&amp;gt; Localizations里，可以看到默认的为English-Development Language。 点击『+』号，">
-<meta property="og:updated_time" content="2017-05-17T08:48:24.000Z">
+<meta property="og:description" content="Charles的HTTPS抓包方法及原理分析">
+<meta property="og:updated_time" content="2017-05-20T03:19:29.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS应用国际化">
-<meta name="twitter:description" content="前言Xcode创建的iOS项目中默认包含了一个base.lproj文件夹，这就是该项目为英语环境提供的本地化文件夹。如果希望iOS项目支持更多的语言、国家环境，就必须提供更多的本地化文件夹。 添加中文国际化文件夹在 Project-&amp;gt;Build Settings-&amp;gt; Localizations里，可以看到默认的为English-Development Language。 点击『+』号，">
+<meta name="twitter:title" content="Charles的HTTPS抓包方法及原理分析">
+<meta name="twitter:description" content="Charles的HTTPS抓包方法及原理分析">
 
     
     <link rel="alternative" href="/atom.xml" title="没有什么能够阻挡" type="application/atom+xml">
@@ -81,14 +80,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/05/22/iOS应用国际化/" title="iOS应用国际化" itemprop="url">iOS应用国际化</a>
+      <a href="/2017/05/20/Charles的HTTPS抓包方法及原理分析/" title="Charles的HTTPS抓包方法及原理分析" itemprop="url">Charles的HTTPS抓包方法及原理分析</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Vin Zhou" target="_blank" itemprop="author">Vin Zhou</a>
 		
   <p class="article-time">
-    <time datetime="2016-05-22T08:53:55.000Z" itemprop="datePublished"> 发表于 May 22 2016</time>
+    <time datetime="2017-05-20T03:17:59.000Z" itemprop="datePublished"> 发表于 May 20 2017</time>
     
   </p>
 </header>
@@ -97,45 +96,16 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加中文国际化文件夹"><span class="toc-number">2.</span> <span class="toc-text">添加中文国际化文件夹</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修改应用程序的显示名称"><span class="toc-number">3.</span> <span class="toc-text">修改应用程序的显示名称</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#国际化文本"><span class="toc-number">4.</span> <span class="toc-text">国际化文本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何访问到指定的资源文件？"><span class="toc-number">5.</span> <span class="toc-text">如何访问到指定的资源文件？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
+			
 		
 		</div>
 		
-		<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Xcode创建的iOS项目中默认包含了一个base.lproj文件夹，这就是该项目为英语环境提供的本地化文件夹。如果希望iOS项目支持更多的语言、国家环境，就必须提供更多的本地化文件夹。</p>
-<h2 id="添加中文国际化文件夹"><a href="#添加中文国际化文件夹" class="headerlink" title="添加中文国际化文件夹"></a>添加中文国际化文件夹</h2><p>在 Project-&gt;Build Settings-&gt; Localizations里，可以看到默认的为English-Development Language。 点击『+』号，可以添加Chinese(Simplified),默认为Main.storyboad和LaunchScreen.storyboard两个文件添加中文版本文件。点击’Finish’就可以看到新增加了一个 zh-Hans.lproj文件夹。</p>
-<h2 id="修改应用程序的显示名称"><a href="#修改应用程序的显示名称" class="headerlink" title="修改应用程序的显示名称"></a>修改应用程序的显示名称</h2><p>应用程序的显示名称默认为PRODUCT_NAME变量的值，即『产品名』。可以在info.plist里添加 CFBundleDisplayName 中文名 修改显示的应用的显示名称</p>
-<h2 id="国际化文本"><a href="#国际化文本" class="headerlink" title="国际化文本"></a>国际化文本</h2><p>国际化文本的过程本质上就是根据指定的language，找到对应存放国际化字符串的资源文件，然后在该文件中查找指定key所对应的字符串。<br>那么如何获得指定的language?</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 查看当前的 language</span></div><div class="line"><span class="built_in">NSArray</span>* langArray = [[<span class="built_in">NSUserDefaults</span> standardUserDefaults] arrayForKey:<span class="string">@"AppleLanguages"</span>];</div><div class="line"><span class="built_in">NSString</span>* currentLanguage = langArray[<span class="number">0</span>];</div></pre></td></tr></table></figure>
-<p>用户在系统Settings里选择的首选语言，可以通过”AppleLanguages”在userDeaults中获得。如果我们不在代码里对这个值修改，系统默认就是使用这个language的。<br>因此，我们可以在代码这样修改：</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 设置当前的 language</span></div><div class="line"> <span class="built_in">NSArray</span>* newLangArray = [<span class="built_in">NSArray</span> arrayWithObjects:<span class="string">@"zh-Hans"</span>, <span class="literal">nil</span>];</div><div class="line"> [[<span class="built_in">NSUserDefaults</span> standardUserDefaults] setObject:newLangArray forKey:<span class="string">@"AppleLanguages"</span>];</div><div class="line"> [[<span class="built_in">NSUserDefaults</span> standardUserDefaults] synchronize];</div></pre></td></tr></table></figure>
-<p>这样就不用手动在Settings里设置了。<br>当然了，我们也可以自己定义一个如 ‘appLanguage’这样的key,来存放我们希望使用的language，以便在需要用的时候再从userDefaults中读取。这需要我们自己来维护。</p>
-<h2 id="如何访问到指定的资源文件？"><a href="#如何访问到指定的资源文件？" class="headerlink" title="如何访问到指定的资源文件？"></a>如何访问到指定的资源文件？</h2><p>在NSBundle.h中，系统提供了4个供获取国际化字符串的宏定义:</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#define NSLocalizedString(key, comment) \</span></div><div class="line">	    [<span class="built_in">NSBundle</span>.mainBundle localizedStringForKey:(key) value:<span class="string">@""</span> table:<span class="literal">nil</span>]</div><div class="line"><span class="meta">#define NSLocalizedStringFromTable(key, tbl, comment) \</span></div><div class="line">	    [<span class="built_in">NSBundle</span>.mainBundle localizedStringForKey:(key) value:<span class="string">@""</span> table:(tbl)]</div><div class="line"><span class="meta">#define NSLocalizedStringFromTableInBundle(key, tbl, bundle, comment) \</span></div><div class="line">	    [bundle localizedStringForKey:(key) value:<span class="string">@""</span> table:(tbl)]</div><div class="line"><span class="meta">#define NSLocalizedStringWithDefaultValue(key, tbl, bundle, val, comment) \</span></div><div class="line">	    [bundle localizedStringForKey:(key) value:(val) table:(tbl)]</div></pre></td></tr></table></figure>
-<p>如果我们使用了AppleLanguages里保存的language信息，这四个方法会自动在bundle里查找对应 language.lproj文件夹。方法一中没有指定table,因此会自动查找文件夹下名为<strong>Localizable.strings</strong>的文件；方法二可以指定任意其他的文件名，如iPhonstring.strings；方法三、四可以自己指定bundel，方法四还可以指定默认值。</p>
-<p>如果使用方法一，需要我们在如 zh-Hans.lproj 文件夹添加中添加 名为 Localizable.strings 的空白文件，然后添加国际化字符串的key-value值， 如 <code>&quot;book&quot; = &quot;书&quot;</code>;。</p>
-<p>如果使用方法四，示例：</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSString</span> *finalBundlePath = [[<span class="built_in">NSBundle</span> mainBundle] pathForResource:<span class="string">@"FinalBundle"</span> ofType:<span class="string">@"bundle"</span>];</div><div class="line"><span class="built_in">NSBundle</span> *finalBundle = [<span class="built_in">NSBundle</span> bundleWithPath:finalBundlePath]; <span class="comment">// 组装bundle</span></div><div class="line"><span class="built_in">NSString</span> *ok = <span class="built_in">NSLocalizedStringWithDefaultValue</span>(<span class="string">@"OK"</span>, <span class="string">@"IPhoneStrings"</span>, finalBundle, <span class="string">@"OK"</span>, <span class="string">""</span>); <span class="comment">// 在 FinalBundle 文件夹里的*.lproj子文件夹的 IPhonStrings.strings 文件里查找 key 为 @"OK" 字符串。</span></div></pre></td></tr></table></figure>
-<p>如果我们使用自己的key来记录当前language信息，那么需要自己组装指定 *.lproj的位置，构造bundle,示例</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSString</span>* bundlePath = [[<span class="built_in">NSBundle</span> mainBundle] pathForResource:[<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%@"</span>,[[<span class="built_in">NSUserDefaults</span> standardUserDefaults] objectForKey:<span class="string">@"appLanguage"</span>]] ofType:<span class="string">@"lproj"</span>]; <span class="comment">// 自己找到诸如 zh-Hans.lproj 的文件夹</span></div><div class="line"><span class="built_in">NSBundle</span>* bundle = [<span class="built_in">NSBundle</span> bundleWithPath:];</div><div class="line"><span class="built_in">NSString</span>* str = [bundle localizedStringForKey:<span class="string">@"OK"</span> value:<span class="literal">nil</span> table:<span class="string">@"IPhoneStrings"</span>]; <span class="comment">//查找IPhoneStrings.strings文件里的@"OK"的字符串</span></div></pre></td></tr></table></figure>
-<p>可以用一个宏定义来指定整个过程，</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#define Localized(key)  [[NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@<span class="meta-string">"%@"</span>,[[NSUserDefaults standardUserDefaults] objectForKey:@<span class="meta-string">"appLanguage"</span>]] ofType:@<span class="meta-string">"lproj"</span>]] localizedStringForKey:(key) value:nil table:@<span class="meta-string">"IPhoneStrings"</span>]</span></div></pre></td></tr></table></figure>
-<p>使用时，直接 NSString* str = Localized(@”OK”); 即可。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.jianshu.com/p/c832eff9aca5" target="_blank" rel="external">API之UIGestureRecognizer及自定义手势</a></p>
+		<p><a href="http://www.jianshu.com/p/870451cb4eb0" target="_blank" rel="external">Charles的HTTPS抓包方法及原理分析</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/技术/">技术</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/iOS/">iOS</a>
-  </div>
 
 </div>
 
@@ -143,7 +113,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://vin-zhou.github.com/2016/05/22/iOS应用国际化/" data-title="iOS应用国际化 | 没有什么能够阻挡" data-tsina="null" class="share clearfix">
+	  <div data-url="http://vin-zhou.github.com/2017/05/20/Charles的HTTPS抓包方法及原理分析/" data-title="Charles的HTTPS抓包方法及原理分析 | 没有什么能够阻挡" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -157,18 +127,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2016/07/17/iOS设计模式札记1-基础模式/" title="iOS设计模式札记1-基础模式">
+ <a href="/2017/07/26/探究Objective-C-之Runloop/" title="探究Objective-C-之Runloop">
   <strong>上一篇：</strong><br/>
   <span>
-  iOS设计模式札记1-基础模式</span>
+  探究Objective-C-之Runloop</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2016/01/26/探究Swift/"  title="探究Swift">
+<a href="/2017/05/18/探究3D-touch/"  title="探究3D touch">
  <strong>下一篇：</strong><br/> 
- <span>探究Swift
+ <span>探究3D touch
 </span>
 </a>
 </div>
@@ -177,7 +147,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2016/05/22/iOS应用国际化/" data-title="iOS应用国际化" data-url="http://vin-zhou.github.com/2016/05/22/iOS应用国际化/"></div>
+	<div class="ds-thread" data-thread-key="2017/05/20/Charles的HTTPS抓包方法及原理分析/" data-title="Charles的HTTPS抓包方法及原理分析" data-url="http://vin-zhou.github.com/2017/05/20/Charles的HTTPS抓包方法及原理分析/"></div>
 </section>
 
 
@@ -187,7 +157,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加中文国际化文件夹"><span class="toc-number">2.</span> <span class="toc-text">添加中文国际化文件夹</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修改应用程序的显示名称"><span class="toc-number">3.</span> <span class="toc-text">修改应用程序的显示名称</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#国际化文本"><span class="toc-number">4.</span> <span class="toc-text">国际化文本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何访问到指定的资源文件？"><span class="toc-number">5.</span> <span class="toc-text">如何访问到指定的资源文件？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
  
   </div>
 
